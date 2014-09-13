@@ -7,11 +7,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkR", "MarkR\MarkR.csproj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E653116F-F974-44BB-8CE1-F386E50B9331}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		LICENSE = LICENSE
+		MarkR.nuspec = MarkR.nuspec
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkR.UnitTests", "MarkR.UnitTests\MarkR.UnitTests.csproj", "{D60BA6A7-3F64-4199-9418-9DA3BE1A53DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{871C8DA5-F455-4422-AC07-D13551B2664D}"
+	ProjectSection(SolutionItems) = preProject
+		Deploy.ps1 = Deploy.ps1
+		IncrementVersion.ps1 = IncrementVersion.ps1
+		ResetAssemblyInfos.ps1 = ResetAssemblyInfos.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BE867ED1-1610-4DE9-9EE3-AA9E8D28214E}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

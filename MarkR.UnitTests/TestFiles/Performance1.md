@@ -1,8 +1,17 @@
-﻿#region References
+﻿# Header
+
+* One
+* Two
+* Three
+* Four
+
+## Code
+
+```
+#region References
 
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 #endregion
 
@@ -19,7 +28,6 @@ namespace MarkR
 		/// <returns>The HTML output from the markdown input.</returns>
 		public static string Convert(string markdown)
 		{
-			var linkRegex = new Regex("\\[[a-zA-Z ]*\\]\\([\\w\\d:/.#&-_@]*( \\\"[\\w ]*\\\")*?\\)");
 			var lines = markdown.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
 			for (var i = 0; i < lines.Count; i++)
 			{
@@ -66,16 +74,6 @@ namespace MarkR
 					lines.Insert(j + 1, "</ul>" );
 					i = j + 1;
 				}
-
-				if (linkRegex.IsMatch(lines[i]))
-				{
-					var match = linkRegex.Match(lines[i]);
-					do
-					{
-						var link = LinkParser.Parse(match.Value);
-						lines[i] = lines[i].Replace(match.Value, link);
-					} while ((match = match.NextMatch()).Success);
-				}
 			}
 
 			return string.Join(Environment.NewLine, lines);
@@ -114,3 +112,14 @@ namespace MarkR
 		#endregion
 	}
 }
+```
+
+### Header Three
+More text here...
+
+<table>
+	<tr>
+		<td>col</td>
+		<td>data</td>
+	</tr>
+</table>

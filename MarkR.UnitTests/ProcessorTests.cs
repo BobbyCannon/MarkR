@@ -18,6 +18,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h5>Test</h5>";
 			var actual = Processor.Convert("#####Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -26,6 +27,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h5>Test</h5>";
 			var actual = Processor.Convert("##### Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -34,6 +36,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h4>Test</h4>";
 			var actual = Processor.Convert("####Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -42,6 +45,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h4>Test</h4>";
 			var actual = Processor.Convert("#### Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -50,6 +54,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h1>Test</h1>";
 			var actual = Processor.Convert("#Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -58,6 +63,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h1>Test</h1>";
 			var actual = Processor.Convert("# Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -66,6 +72,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h6>Test</h6>";
 			var actual = Processor.Convert("######Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -74,6 +81,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h6>Test</h6>";
 			var actual = Processor.Convert("###### Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -82,6 +90,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h3>Test</h3>";
 			var actual = Processor.Convert("###Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -90,6 +99,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h3>Test</h3>";
 			var actual = Processor.Convert("### Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -98,6 +108,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h2>Test</h2>";
 			var actual = Processor.Convert("##Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -106,6 +117,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = "<h2>Test</h2>";
 			var actual = Processor.Convert("## Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -114,6 +126,7 @@ namespace MarkR.UnitTests
 		{
 			var expected = string.Format("<ul>{0}<li>Test</li>{0}</ul>", Environment.NewLine);
 			var actual = Processor.Convert("* Test");
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -123,6 +136,7 @@ namespace MarkR.UnitTests
 			var markdown = string.Format("* One{0}* Two{0}* Three", Environment.NewLine);
 			var expected = string.Format("<ul>{0}<li>One</li>{0}<li>Two</li>{0}<li>Three</li>{0}</ul>", Environment.NewLine);
 			var actual = Processor.Convert(markdown);
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -132,33 +146,48 @@ namespace MarkR.UnitTests
 			var markdown = string.Format("* One{0}* Two", Environment.NewLine);
 			var expected = string.Format("<ul>{0}<li>One</li>{0}<li>Two</li>{0}</ul>", Environment.NewLine);
 			var actual = Processor.Convert(markdown);
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
-		public void ParseAllThings()
+		public void ParseTest1()
 		{
 			var markdown = File.ReadAllText("TestFiles/TestFile1.md");
 			var expected = File.ReadAllText("TestFiles/TestFile1.html");
 			var actual = Processor.Convert(markdown);
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
-		public void ParseCodeBlock()
+		public void ParseTest2()
 		{
 			var markdown = File.ReadAllText("TestFiles/TestFile2.md");
 			var expected = File.ReadAllText("TestFiles/TestFile2.html");
 			var actual = Processor.Convert(markdown);
+			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
 
 		[TestMethod]
-		public void ParseCodeBlockWithClassName()
+		public void ParseTest3()
 		{
 			var markdown = File.ReadAllText("TestFiles/TestFile3.md");
 			var expected = File.ReadAllText("TestFiles/TestFile3.html");
 			var actual = Processor.Convert(markdown);
+			Console.WriteLine(actual);
+			Assert.AreEqual(expected, actual);
+		}
+		
+		[TestMethod]
+		public void ParseCodePerformance()
+		{
+			var markdown = File.ReadAllText("TestFiles/Performance1.md");
+			var expected = File.ReadAllText("TestFiles/Performance1.html");
+			var actual = Processor.Convert(markdown);
+			Console.WriteLine(actual);
+			//File.WriteAllText("../../TestFiles/Performance1.html", actual);
 			Assert.AreEqual(expected, actual);
 		}
 
