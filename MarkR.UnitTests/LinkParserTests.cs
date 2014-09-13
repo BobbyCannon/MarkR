@@ -23,7 +23,7 @@ namespace MarkR.UnitTests
 			Assert.AreEqual("", parser.Title);
 			Assert.AreEqual("<a href=\"http://test.com\">Test</a>", parser.ToLink());
 		}
-		
+
 		[TestMethod]
 		public void ParseLinkSpaceInContent()
 		{
@@ -49,7 +49,7 @@ namespace MarkR.UnitTests
 			Assert.AreEqual("MySite", parser.Title);
 			Assert.AreEqual("<a href=\"http://test.com\" title=\"MySite\">MySite</a>", parser.ToLink());
 		}
-		
+
 		[TestMethod]
 		public void ParseLinkSpaceWithTitleWithSpace()
 		{

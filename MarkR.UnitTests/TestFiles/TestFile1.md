@@ -9,6 +9,8 @@
 
 Visit my [Website](https://bobbycannon.com).
 
+Another paragraph.
+
 ```
 public void Add(int x, int y)
 {

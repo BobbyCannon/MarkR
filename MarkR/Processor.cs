@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -23,6 +22,8 @@ namespace MarkR
 		{
 			var linkRegex = new Regex("\\[[a-zA-Z ]*\\]\\([\\w\\d:/.#&-_@]*( \\\"[\\w ]*\\\")*?\\)");
 			var lines = markdown.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+			var startedParagraph = -1;
+
 			for (var i = 0; i < lines.Count; i++)
 			{
 				if (lines[i].StartsWith("#"))
@@ -44,7 +45,7 @@ namespace MarkR
 						// Set start of block
 						var className = lines[i].Replace("```", string.Empty);
 						lines.RemoveAt(i);
-						lines.RemoveAt(j-1);
+						lines.RemoveAt(j - 1);
 						lines[i] = (className.Length > 0 ? "<pre><code class=\"" + className + "\">" : "<pre><code>") + lines[i];
 						lines[j - 2] += "</code></pre>";
 						i = j - 2;
@@ -68,7 +69,7 @@ namespace MarkR
 					}
 
 					lines.Insert(i, "<ul>");
-					lines.Insert(j + 1, "</ul>" );
+					lines.Insert(j + 1, "</ul>");
 					i = j + 1;
 				}
 
@@ -81,11 +82,30 @@ namespace MarkR
 						lines[i] = lines[i].Replace(match.Value, link);
 					} while ((match = match.NextMatch()).Success);
 				}
+
+				if (startedParagraph == -1 && lines[i].Length > 0 && !lines[i].Trim().StartsWith("<"))
+				{
+					startedParagraph = i;
+					continue;
+				}
+				
+				if (startedParagraph >= 0 && string.IsNullOrWhiteSpace(lines[i]))
+				{
+					lines[startedParagraph] = "<p>" + lines[startedParagraph];
+					lines[i-1] += "</p>";
+					startedParagraph = -1;
+				}
+			}
+
+			if (startedParagraph > 0)
+			{
+				lines[startedParagraph] = "<p>" + lines[startedParagraph];
+				lines[lines.Count - 1] += "</p>";
 			}
 
 			return string.Join(Environment.NewLine, lines);
 		}
-		
+
 		private static string ParseHeaders(string line)
 		{
 			if (line.StartsWith("######"))

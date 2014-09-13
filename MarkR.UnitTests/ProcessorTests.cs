@@ -151,12 +151,24 @@ namespace MarkR.UnitTests
 		}
 
 		[TestMethod]
+		public void ParseCodePerformance()
+		{
+			var markdown = File.ReadAllText("TestFiles/Performance1.md");
+			var expected = File.ReadAllText("TestFiles/Performance1.html");
+			var actual = Processor.Convert(markdown);
+			Console.WriteLine(actual);
+			//File.WriteAllText("../../TestFiles/Performance1.html", actual);
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
 		public void ParseTest1()
 		{
 			var markdown = File.ReadAllText("TestFiles/TestFile1.md");
 			var expected = File.ReadAllText("TestFiles/TestFile1.html");
 			var actual = Processor.Convert(markdown);
 			Console.WriteLine(actual);
+			//File.WriteAllText("../../TestFiles/TestFile1.html", actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -178,17 +190,6 @@ namespace MarkR.UnitTests
 			var expected = File.ReadAllText("TestFiles/TestFile3.html");
 			var actual = Processor.Convert(markdown);
 			Console.WriteLine(actual);
-			Assert.AreEqual(expected, actual);
-		}
-		
-		[TestMethod]
-		public void ParseCodePerformance()
-		{
-			var markdown = File.ReadAllText("TestFiles/Performance1.md");
-			var expected = File.ReadAllText("TestFiles/Performance1.html");
-			var actual = Processor.Convert(markdown);
-			Console.WriteLine(actual);
-			//File.WriteAllText("../../TestFiles/Performance1.html", actual);
 			Assert.AreEqual(expected, actual);
 		}
 
