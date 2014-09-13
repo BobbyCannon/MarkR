@@ -9,8 +9,7 @@
 
 <h2>Code</h2>
 
-<pre><code>
-#region References
+<pre><code>#region References
 
 using System;
 using System.Linq;
@@ -23,35 +22,35 @@ namespace MarkR
 	{
 		#region Static Methods
 
-		/// <summary>
+		/// &lt;summary&gt;
 		/// Converts markdown input into HTML output.
-		/// </summary>
-		/// <param name="markdown">The markdown text to convert.</param>
-		/// <returns>The HTML output from the markdown input.</returns>
+		/// &lt;/summary&gt;
+		/// &lt;param name=&quot;markdown&quot;&gt;The markdown text to convert.&lt;/param&gt;
+		/// &lt;returns&gt;The HTML output from the markdown input.&lt;/returns&gt;
 		public static string Convert(string markdown)
 		{
 			var lines = markdown.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
-			for (var i = 0; i < lines.Count; i++)
+			for (var i = 0; i &lt; lines.Count; i++)
 			{
-				if (lines[i].StartsWith("#"))
+				if (lines[i].StartsWith(&quot;#&quot;))
 				{
 					lines[i] = ParseHeaders(lines[i]);
 					continue;
 				}
 
-				if (lines[i].StartsWith("```"))
+				if (lines[i].StartsWith(&quot;```&quot;))
 				{
-					for (var j = i + 1; j < lines.Count; j++)
+					for (var j = i + 1; j &lt; lines.Count; j++)
 					{
-						if (!lines[j].StartsWith("```"))
+						if (!lines[j].StartsWith(&quot;```&quot;))
 						{
 							continue;
 						}
 
 						// Set start of block
-						var className = lines[i].Replace("```", string.Empty);
-						lines[i] = className.Length > 0 ? "<pre><code class=\"" + className + "\">" : "<pre><code>";
-						lines[j] = "</code></pre>";
+						var className = lines[i].Replace(&quot;```&quot;, string.Empty);
+						lines[i] = className.Length &gt; 0 ? &quot;&lt;pre&gt;&lt;code class=\&quot;&quot; + className + &quot;\&quot;&gt;&quot; : &quot;&lt;pre&gt;&lt;code&gt;&quot;;
+						lines[j] = &quot;&lt;/code&gt;&lt;/pre&gt;&quot;;
 						i = j;
 						break;
 					}
@@ -59,21 +58,21 @@ namespace MarkR
 					continue;
 				}
 
-				if (lines[i].StartsWith("* "))
+				if (lines[i].StartsWith(&quot;* &quot;))
 				{
 					var j = i;
-					while (++j < lines.Count && lines[j].StartsWith("* "))
+					while (++j &lt; lines.Count &amp;&amp; lines[j].StartsWith(&quot;* &quot;))
 					{
 						// Do nothing... but loop.
 					}
 
-					for (var k = i; k < j; k++)
+					for (var k = i; k &lt; j; k++)
 					{
-						lines[k] = lines[k].Replace("* ", "<li>") + "</li>";
+						lines[k] = lines[k].Replace(&quot;* &quot;, &quot;&lt;li&gt;&quot;) + &quot;&lt;/li&gt;&quot;;
 					}
 
-					lines.Insert(i, "<ul>");
-					lines.Insert(j + 1, "</ul>" );
+					lines.Insert(i, &quot;&lt;ul&gt;&quot;);
+					lines.Insert(j + 1, &quot;&lt;/ul&gt;&quot; );
 					i = j + 1;
 				}
 			}
@@ -83,38 +82,37 @@ namespace MarkR
 
 		private static string ParseHeaders(string line)
 		{
-			if (line.StartsWith("######"))
+			if (line.StartsWith(&quot;######&quot;))
 			{
-				return line.Replace("###### ", "<h6>").Replace("######", "<h6>") + "</h6>";
+				return line.Replace(&quot;###### &quot;, &quot;&lt;h6&gt;&quot;).Replace(&quot;######&quot;, &quot;&lt;h6&gt;&quot;) + &quot;&lt;/h6&gt;&quot;;
 			}
 
-			if (line.StartsWith("#####"))
+			if (line.StartsWith(&quot;#####&quot;))
 			{
-				return line.Replace("##### ", "<h5>").Replace("#####", "<h5>") + "</h5>";
+				return line.Replace(&quot;##### &quot;, &quot;&lt;h5&gt;&quot;).Replace(&quot;#####&quot;, &quot;&lt;h5&gt;&quot;) + &quot;&lt;/h5&gt;&quot;;
 			}
 
-			if (line.StartsWith("####"))
+			if (line.StartsWith(&quot;####&quot;))
 			{
-				return line.Replace("#### ", "<h4>").Replace("####", "<h4>") + "</h4>";
+				return line.Replace(&quot;#### &quot;, &quot;&lt;h4&gt;&quot;).Replace(&quot;####&quot;, &quot;&lt;h4&gt;&quot;) + &quot;&lt;/h4&gt;&quot;;
 			}
 
-			if (line.StartsWith("###"))
+			if (line.StartsWith(&quot;###&quot;))
 			{
-				return line.Replace("### ", "<h3>").Replace("###", "<h3>") + "</h3>";
+				return line.Replace(&quot;### &quot;, &quot;&lt;h3&gt;&quot;).Replace(&quot;###&quot;, &quot;&lt;h3&gt;&quot;) + &quot;&lt;/h3&gt;&quot;;
 			}
 
-			if (line.StartsWith("##"))
+			if (line.StartsWith(&quot;##&quot;))
 			{
-				return line.Replace("## ", "<h2>").Replace("##", "<h2>") + "</h2>";
+				return line.Replace(&quot;## &quot;, &quot;&lt;h2&gt;&quot;).Replace(&quot;##&quot;, &quot;&lt;h2&gt;&quot;) + &quot;&lt;/h2&gt;&quot;;
 			}
 
-			return line.Replace("# ", "<h1>").Replace("#", "<h1>") + "</h1>";
+			return line.Replace(&quot;# &quot;, &quot;&lt;h1&gt;&quot;).Replace(&quot;#&quot;, &quot;&lt;h1&gt;&quot;) + &quot;&lt;/h1&gt;&quot;;
 		}
 
 		#endregion
 	}
-}
-</code></pre>
+}</code></pre>
 
 <h3>Header Three</h3>
 More text here...

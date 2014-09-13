@@ -1,11 +1,13 @@
-﻿<h3>Header</h3>
+<h3>Header</h3>
 
-<pre><code>
-public void Add(int x, int y)
+<pre><code>public IEnumerable&lt;Person&gt; Get()
 {
-	// This is a comment.
-	return x + y;
-}
-</code></pre>
+    var parent = new Person { Name = &quot;John Smith&quot; };
+    var child1 = new Person { Name = &quot;Bob Smith&quot;, Parent = parent };
+    var child2 = new Person { Name = &quot;Suzy Smith&quot;, Parent = parent };
+    parent.Children = new[] { child1, child2 };
+
+    return new[] { parent, child1, child2 };
+}</code></pre>
 
 More text here...

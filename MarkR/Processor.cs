@@ -2,7 +2,9 @@
 
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Web;
 
 #endregion
 
@@ -33,6 +35,7 @@ namespace MarkR
 				{
 					for (var j = i + 1; j < lines.Count; j++)
 					{
+						lines[j] = HttpUtility.HtmlEncode(lines[j]);
 						if (!lines[j].StartsWith("```"))
 						{
 							continue;
@@ -40,9 +43,11 @@ namespace MarkR
 
 						// Set start of block
 						var className = lines[i].Replace("```", string.Empty);
-						lines[i] = className.Length > 0 ? "<pre><code class=\"" + className + "\">" : "<pre><code>";
-						lines[j] = "</code></pre>";
-						i = j;
+						lines.RemoveAt(i);
+						lines.RemoveAt(j-1);
+						lines[i] = (className.Length > 0 ? "<pre><code class=\"" + className + "\">" : "<pre><code>") + lines[i];
+						lines[j - 2] += "</code></pre>";
+						i = j - 2;
 						break;
 					}
 
@@ -80,7 +85,7 @@ namespace MarkR
 
 			return string.Join(Environment.NewLine, lines);
 		}
-
+		
 		private static string ParseHeaders(string line)
 		{
 			if (line.StartsWith("######"))

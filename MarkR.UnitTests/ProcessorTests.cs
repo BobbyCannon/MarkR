@@ -167,6 +167,7 @@ namespace MarkR.UnitTests
 			var expected = File.ReadAllText("TestFiles/TestFile2.html");
 			var actual = Processor.Convert(markdown);
 			Console.WriteLine(actual);
+			//File.WriteAllText("../../TestFiles/TestFile2.html", actual);
 			Assert.AreEqual(expected, actual);
 		}
 
