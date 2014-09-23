@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
-		<id>MarkR</id>
+		<id>MarkR.PowerShell</id>
 		<version>1.0</version>
 		<authors>Bobby Cannon</authors>
 		<description>Markdown parser written in C#. (BETA... maybe even alpha)</description>
@@ -10,9 +10,11 @@
 		</dependencies>
 		<references>
 			<reference file="MarkR.dll" />
+			<reference file="MarkR.PowerShell.dll" />
 		</references>
 	</metadata>
 	<files>
 		<file src="C:\Binaries\MarkR\MarkR.dll" target="lib\net40" />
+		<file src="C:\Binaries\MarkR\MarkR.PowerShell.dll" target="lib\net40" />
 	</files>
 </package>
