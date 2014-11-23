@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.UI.WebControls;
 
 #endregion
 
@@ -21,14 +22,14 @@ namespace MarkR
 		public static string Convert(string markdown)
 		{
 			var linkRegex = new Regex("\\[[a-zA-Z ]*\\]\\([\\w\\d:/.#&-_@]*( \\\"[\\w ]*\\\")*?\\)");
-			var lines = markdown.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+			var lines = markdown.Split(new[] { Environment.NewLine, "\n", "\r" }, StringSplitOptions.None).ToList();
 			var startedParagraph = -1;
 
 			for (var i = 0; i < lines.Count; i++)
 			{
 				if (lines[i].StartsWith("#"))
 				{
-					lines[i] = ParseHeaders(lines[i]);
+					lines[i] = ParseHeader(lines[i]);
 					continue;
 				}
 
@@ -106,34 +107,52 @@ namespace MarkR
 			return string.Join(Environment.NewLine, lines);
 		}
 
-		private static string ParseHeaders(string line)
+		private static string ParseHeader(string line)
 		{
+			var header = "h1";
 			if (line.StartsWith("######"))
 			{
-				return line.Replace("###### ", "<h6>").Replace("######", "<h6>") + "</h6>";
-			}
-
-			if (line.StartsWith("#####"))
+				header = "h6";
+				line = line.Replace("######", string.Empty).Trim();
+			} 
+			else if (line.StartsWith("#####"))
 			{
-				return line.Replace("##### ", "<h5>").Replace("#####", "<h5>") + "</h5>";
-			}
-
-			if (line.StartsWith("####"))
+				header = "h5";
+				line = line.Replace("#####", string.Empty).Trim();
+			} 
+			else if (line.StartsWith("####"))
 			{
-				return line.Replace("#### ", "<h4>").Replace("####", "<h4>") + "</h4>";
+				header = "h4";
+				line = line.Replace("####", string.Empty).Trim();
 			}
-
-			if (line.StartsWith("###"))
+			else if (line.StartsWith("###"))
 			{
-				return line.Replace("### ", "<h3>").Replace("###", "<h3>") + "</h3>";
+				header = "h3";
+				line = line.Replace("###", string.Empty).Trim();
 			}
-
-			if (line.StartsWith("##"))
+			else if (line.StartsWith("##"))
 			{
-				return line.Replace("## ", "<h2>").Replace("##", "<h2>") + "</h2>";
+				header = "h2";
+				line = line.Replace("##", string.Empty).Trim();
+			}
+			else
+			{
+				line = line.Replace("#", string.Empty).Trim();
 			}
 
-			return line.Replace("# ", "<h1>").Replace("#", "<h1>") + "</h1>";
+			if (line.StartsWith(":"))
+			{
+				var index = line.IndexOf(" ");
+				var classNames = line.Substring(0, index)
+					.Replace(":", string.Empty)
+					.Replace(",", " ")
+					.Trim();
+
+				line = line.Substring(index).Trim();
+				return string.Format("<{0} class=\"{1}\">{2}</{0}>", header, classNames, line);
+			}
+			
+			return string.Format("<{0}>{1}</{0}>", header, line);
 		}
 
 		#endregion

@@ -7,14 +7,13 @@
 		<description>Markdown parser written in C#. (BETA... maybe even alpha)</description>
 		<projectUrl>http://bobbycannon.github.io/MarkR</projectUrl>
 		<dependencies>
+			<dependency id="MarkR" version="0.1" />
 		</dependencies>
 		<references>
-			<reference file="MarkR.dll" />
 			<reference file="MarkR.PowerShell.dll" />
 		</references>
 	</metadata>
 	<files>
-		<file src="C:\Binaries\MarkR\MarkR.dll" target="lib\net40" />
 		<file src="C:\Binaries\MarkR\MarkR.PowerShell.dll" target="lib\net40" />
 	</files>
 </package>

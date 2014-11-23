@@ -12,12 +12,48 @@ namespace MarkR.UnitTests
 	public class ProcessorTests
 	{
 		#region Methods
+		
+		[TestMethod]
+		public void TestNewLinesOnly()
+		{
+			var input = "### test\n\n\n* test\n* again\n\nTesting\n\nAnother Paragraph";
+			var expected = "<h3>test</h3>\r\n\r\n\r\n<ul>\r\n<li>test</li>\r\n<li>again</li>\r\n</ul>\r\n\r\n<p>Testing</p>\r\n\r\n<p>Another Paragraph</p>";
+			var actual = Processor.Convert(input);
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void TestReturnLinesOnly()
+		{
+			var input = "### test\r\r\r* test\r* again\r\rTesting\r\rAnother Paragraph";
+			var expected = "<h3>test</h3>\r\n\r\n\r\n<ul>\r\n<li>test</li>\r\n<li>again</li>\r\n</ul>\r\n\r\n<p>Testing</p>\r\n\r\n<p>Another Paragraph</p>";
+			var actual = Processor.Convert(input);
+			Assert.AreEqual(expected, actual);
+		}
 
 		[TestMethod]
 		public void ConvertHeaderFive()
 		{
 			var expected = "<h5>Test</h5>";
 			var actual = Processor.Convert("#####Test");
+			Console.WriteLine(actual);
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void ConvertHeaderWithClass()
+		{
+			var expected = "<h5 class=\"blue\">Test</h5>";
+			var actual = Processor.Convert("#####:blue Test");
+			Console.WriteLine(actual);
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void ConvertHeaderWithMulitpleClasses()
+		{
+			var expected = "<h5 class=\"blue light\">Test</h5>";
+			var actual = Processor.Convert("#####:blue,light Test");
 			Console.WriteLine(actual);
 			Assert.AreEqual(expected, actual);
 		}
