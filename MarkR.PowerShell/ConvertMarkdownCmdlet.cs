@@ -20,7 +20,8 @@ namespace MarkR.PowerShell
 
 		protected override void ProcessRecord()
 		{
-			WriteObject(Processor.Convert(Input));
+			var markdown = new Markdown();
+			WriteObject(markdown.Transform(Input));
 		}
 
 		#endregion

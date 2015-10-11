@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkR", "MarkR\MarkR.csproj", "{F8B8528C-32A3-463E-9098-41BB6056540A}"
 EndProject
@@ -9,9 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		LICENSE = LICENSE
+		LICENSE.md = LICENSE.md
 		MarkR.nuspec = MarkR.nuspec
-		MarkR.PowerShell.nuspec = MarkR.PowerShell.nuspec
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -21,15 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{871C
 	ProjectSection(SolutionItems) = preProject
 		Deploy.ps1 = Deploy.ps1
 		IncrementVersion.ps1 = IncrementVersion.ps1
-		ResetAssemblyInfos.ps1 = ResetAssemblyInfos.ps1
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BE867ED1-1610-4DE9-9EE3-AA9E8D28214E}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkR.PowerShell", "MarkR.PowerShell\MarkR.PowerShell.csproj", "{1315B3E5-EB1C-43C9-9B06-8F20F0B0F804}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +36,6 @@ Global
 		{D60BA6A7-3F64-4199-9418-9DA3BE1A53DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D60BA6A7-3F64-4199-9418-9DA3BE1A53DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D60BA6A7-3F64-4199-9418-9DA3BE1A53DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1315B3E5-EB1C-43C9-9B06-8F20F0B0F804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1315B3E5-EB1C-43C9-9B06-8F20F0B0F804}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1315B3E5-EB1C-43C9-9B06-8F20F0B0F804}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1315B3E5-EB1C-43C9-9B06-8F20F0B0F804}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,30 @@
+<p>Simple block on one line:</p>
+
+<p><div>foo</div></p>
+
+<p>And nested without indentation:</p>
+
+<p><div><br />
+<div><br />
+<div><br />
+foo<br />
+</div><br />
+<div style=">"/><br />
+</div><br />
+<div>bar</div><br />
+</div></p>
+
+<p>And with attributes:</p>
+
+<p><div><br />
+    <div id="foo"><br />
+    </div><br />
+</div></p>
+
+<p>This was broken in 1.0.2b7:</p>
+
+<p><div class="inlinepage"><br />
+<div class="toggleableend"><br />
+foo<br />
+</div><br />
+</div></p>

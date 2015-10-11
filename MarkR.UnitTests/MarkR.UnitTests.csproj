@@ -45,14 +45,15 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ProcessorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LinkParserTests.cs" />
+    <Compile Include="FileTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MarkR\MarkR.csproj">
@@ -60,39 +61,104 @@
       <Name>MarkR</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Content Include="TestFiles\Performance1.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\TestFile3.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\TestFile2.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\TestFile1.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="TestFiles\amps-and-angle-encoding.html" />
+    <Content Include="TestFiles\auto-links.html" />
+    <Content Include="TestFiles\backslash-escapes.html" />
+    <Content Include="TestFiles\blockquotes-with-code-blocks.html" />
+    <Content Include="TestFiles\code-block-in-a-list-item.html" />
+    <Content Include="TestFiles\code-blocks.html" />
+    <Content Include="TestFiles\code-inside-list.html" />
+    <Content Include="TestFiles\code-spans.html" />
+    <Content Include="TestFiles\email-auto-links.html" />
+    <Content Include="TestFiles\emphasis.html" />
+    <Content Include="TestFiles\failure-to-escape-less-than.html" />
+    <Content Include="TestFiles\hard-wrapped-paragraphs-with-list-like-lines.html" />
+    <Content Include="TestFiles\headers.html" />
+    <Content Include="TestFiles\horizontal-rules.html" />
+    <Content Include="TestFiles\html-comment-edge-case.html" />
+    <Content Include="TestFiles\images.html" />
+    <Content Include="TestFiles\indented-code-in-list-item.html" />
+    <Content Include="TestFiles\inline-html-advanced.html" />
+    <Content Include="TestFiles\inline-html-comments.html" />
+    <Content Include="TestFiles\inline-html-simple.html" />
+    <Content Include="TestFiles\inline-html-span.html" />
+    <Content Include="TestFiles\ins-and-del.html" />
+    <Content Include="TestFiles\line-endings-cr.html" />
+    <Content Include="TestFiles\line-endings-crlf.html" />
+    <Content Include="TestFiles\line-endings-lf.html" />
+    <Content Include="TestFiles\links-inline-style.html" />
+    <Content Include="TestFiles\links-reference-style.html" />
+    <Content Include="TestFiles\links-shortcut-references.html" />
+    <Content Include="TestFiles\literal-quotes-in-titles.html" />
+    <Content Include="TestFiles\markdown-documentation-basics.html" />
+    <Content Include="TestFiles\markdown-documentation-syntax.html" />
+    <Content Include="TestFiles\markdown-readme.html" />
+    <Content Include="TestFiles\md5-hashes.html" />
+    <Content Include="TestFiles\nested-blockquotes.html" />
+    <Content Include="TestFiles\nested-divs.html" />
+    <Content Include="TestFiles\nested-emphasis.html" />
+    <Content Include="TestFiles\nesting.html" />
+    <Content Include="TestFiles\ordered-and-unordered-lists.html" />
+    <Content Include="TestFiles\parens-in-url.html" />
+    <Content Include="TestFiles\php-specific-bugs.html" />
+    <Content Include="TestFiles\strong-and-em-together.html" />
+    <Content Include="TestFiles\tabs.html" />
+    <Content Include="TestFiles\tidyness.html" />
+    <Content Include="TestFiles\tight-blocks.html" />
+    <Content Include="TestFiles\unordered-list-and-horizontal-rules.html" />
+    <Content Include="TestFiles\unordered-list-followed-by-ordered-list.html" />
+    <Content Include="TestFiles\unpredictable-sublists.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestFiles\TestFile1.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestFiles\TestFile2.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestFiles\TestFile3.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TestFiles\Performance1.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="TestFiles\amps-and-angle-encoding.text" />
+    <None Include="TestFiles\auto-links.text" />
+    <None Include="TestFiles\backslash-escapes.text" />
+    <None Include="TestFiles\blockquotes-with-code-blocks.text" />
+    <None Include="TestFiles\code-block-in-a-list-item.text" />
+    <None Include="TestFiles\code-blocks.text" />
+    <None Include="TestFiles\code-inside-list.text" />
+    <None Include="TestFiles\code-spans.text" />
+    <None Include="TestFiles\email-auto-links.text" />
+    <None Include="TestFiles\emphasis.text" />
+    <None Include="TestFiles\failure-to-escape-less-than.text" />
+    <None Include="TestFiles\hard-wrapped-paragraphs-with-list-like-lines.text" />
+    <None Include="TestFiles\headers.text" />
+    <None Include="TestFiles\horizontal-rules.text" />
+    <None Include="TestFiles\html-comment-edge-case.text" />
+    <None Include="TestFiles\images.text" />
+    <None Include="TestFiles\indented-code-in-list-item.text" />
+    <None Include="TestFiles\inline-html-advanced.text" />
+    <None Include="TestFiles\inline-html-comments.text" />
+    <None Include="TestFiles\inline-html-simple.text" />
+    <None Include="TestFiles\inline-html-span.text" />
+    <None Include="TestFiles\ins-and-del.text" />
+    <None Include="TestFiles\line-endings-cr.text" />
+    <None Include="TestFiles\line-endings-crlf.text" />
+    <None Include="TestFiles\line-endings-lf.text" />
+    <None Include="TestFiles\links-inline-style.text" />
+    <None Include="TestFiles\links-reference-style.text" />
+    <None Include="TestFiles\links-shortcut-references.text" />
+    <None Include="TestFiles\literal-quotes-in-titles.text" />
+    <None Include="TestFiles\markdown-documentation-basics.text" />
+    <None Include="TestFiles\markdown-documentation-syntax.text" />
+    <None Include="TestFiles\markdown-readme.text" />
+    <None Include="TestFiles\md5-hashes.text" />
+    <None Include="TestFiles\nested-blockquotes.text" />
+    <None Include="TestFiles\nested-divs.text" />
+    <None Include="TestFiles\nested-emphasis.text" />
+    <None Include="TestFiles\nesting.text" />
+    <None Include="TestFiles\ordered-and-unordered-lists.text" />
+    <None Include="TestFiles\parens-in-url.text" />
+    <None Include="TestFiles\php-specific-bugs.text" />
+    <None Include="TestFiles\strong-and-em-together.text" />
+    <None Include="TestFiles\tabs.text" />
+    <None Include="TestFiles\tidyness.text" />
+    <None Include="TestFiles\tight-blocks.text" />
+    <None Include="TestFiles\unordered-list-and-horizontal-rules.text" />
+    <None Include="TestFiles\unordered-list-followed-by-ordered-list.text" />
+    <None Include="TestFiles\unpredictable-sublists.text" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
