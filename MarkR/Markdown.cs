@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -17,11 +18,6 @@ namespace MarkR
 	public class Markdown
 	{
 		#region Constants
-
-		/// <summary>
-		/// Version of this markdown parser.
-		/// </summary>
-		public const string Version = "1.14";
 
 		private const string _charEndingUrl = "[-A-Z0-9+&@#/%=~_|\\[\\])]";
 		private const string _charInsideUrl = @"[-A-Z0-9+&@#/%?=~_|\[\]\(\)!:,\.;" + "\x1a]";
@@ -294,6 +290,15 @@ namespace MarkR
 
 		#endregion
 
+		#region Properties
+
+		/// <summary>
+		/// Version of this markdown parser.
+		/// </summary>
+		public string Version => Assembly.GetCallingAssembly().GetName().Version.ToString();
+
+		#endregion
+
 		#region Methods
 
 		/// <summary>
@@ -476,7 +481,7 @@ namespace MarkR
 			return "\n\n" + key + "\n\n";
 		}
 
-		private string BlockQuoteEvaluator2(Match match)
+		private static string BlockQuoteEvaluator2(Match match)
 		{
 			return Regex.Replace(match.Groups[1].Value, @"^  ", "", RegexOptions.Multiline);
 		}
