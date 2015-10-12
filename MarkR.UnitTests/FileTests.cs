@@ -14,6 +14,13 @@ namespace MarkR.UnitTests
 		#region Methods
 
 		[TestMethod]
+		public void Version()
+		{
+			var parser = new Markdown();
+			Assert.IsTrue(parser.Version.StartsWith("1.14"));
+		}
+
+		[TestMethod]
 		public void ParseTestFiles()
 		{
 			var parser = new Markdown();
@@ -22,6 +29,7 @@ namespace MarkR.UnitTests
             foreach (var file in files)
 			{
 				//Console.WriteLine(file);
+
 				var resultFile = file.Replace(".text", ".html");
 				var expected = File.ReadAllText(resultFile);
 				var markdown = File.ReadAllText(file);
