@@ -1,6 +1,5 @@
 ﻿#region References
 
-using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,19 +13,12 @@ namespace MarkR.UnitTests
 		#region Methods
 
 		[TestMethod]
-		public void Version()
-		{
-			var parser = new Markdown();
-			Assert.IsTrue(parser.Version.StartsWith("1.14"));
-		}
-
-		[TestMethod]
 		public void ParseTestFiles()
 		{
 			var parser = new Markdown();
 			var files = Directory.GetFiles("../../TestFiles", "*.text");
 
-            foreach (var file in files)
+			foreach (var file in files)
 			{
 				//Console.WriteLine(file);
 
@@ -39,6 +31,13 @@ namespace MarkR.UnitTests
 
 				Assert.AreEqual(expected, actual);
 			}
+		}
+
+		[TestMethod]
+		public void Version()
+		{
+			var parser = new Markdown();
+			Assert.IsTrue(parser.Version.StartsWith("1.14"));
 		}
 
 		#endregion
