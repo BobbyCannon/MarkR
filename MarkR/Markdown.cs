@@ -242,7 +242,8 @@ namespace MarkR
 		private static readonly Regex _outDent = new Regex(@"^[ ]{1," + _tabWidth + @"}", RegexOptions.Multiline | RegexOptions.Compiled);
 		private static readonly Regex _amps = new Regex(@"&(?!((#[0-9]+)|(#[xX][a-fA-F0-9]+)|([a-zA-Z][a-zA-Z0-9]*));)", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
-		private static readonly Regex _angles = new Regex(@"<(?![A-Za-z/?\$!])", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+		private static readonly Regex _leftAngles = new Regex(@"<(?![A-Za-z/?\$!])", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+		private static readonly Regex _rightAngles = new Regex(@"(?<!br )(?<!hr[a-zA-Z"" =]* )(?<!h[1-6])((?<![/])(?<![a-zA-Z""'-]))>", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
 		private static readonly Regex _backslashEscapes;
 
@@ -736,7 +737,8 @@ namespace MarkR
 		private string EncodeAmpsAndAngles(string s)
 		{
 			s = _amps.Replace(s, "&amp;");
-			s = _angles.Replace(s, "&lt;");
+			s = _leftAngles.Replace(s, "&lt;");
+			s = _rightAngles.Replace(s, "&gt;");
 			return s;
 		}
 
@@ -1303,7 +1305,7 @@ namespace MarkR
 		/// makes sure text ends with a couple of newlines;
 		/// removes any blank lines (only spaces) in the text
 		/// </summary>
-		private string Normalize(string text)
+		private static string Normalize(string text)
 		{
 			var output = new StringBuilder(text.Length);
 			var line = new StringBuilder();
@@ -1361,6 +1363,7 @@ namespace MarkR
 			{
 				output.Append(line);
 			}
+
 			output.Append('\n');
 
 			// add two newlines to the end before return

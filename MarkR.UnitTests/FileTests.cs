@@ -2,7 +2,6 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #endregion
@@ -24,13 +23,13 @@ namespace MarkR.UnitTests
 			{
 				//Console.WriteLine(file);
 				var resultFile = file.Replace(".text", ".html");
-				//var expected = File.ReadAllText(resultFile);
+				var expected = File.ReadAllText(resultFile);
 				var markdown = File.ReadAllText(file);
 				var actual = parser.Transform(markdown);
 
-				File.WriteAllText(resultFile, actual);
-				
-				//Assert.AreEqual(expected, actual);
+				//File.WriteAllText(resultFile, actual);
+
+				Assert.AreEqual(expected, actual);
 			}
 		}
 

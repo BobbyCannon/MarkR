@@ -55,15 +55,18 @@ Hr's:
 
 <hr />
 
-<hr>   
-
-<hr/>  
-
-<hr /> 
-
 <hr class="foo" id="bar" />
 
 <hr class="foo" id="bar"/>
 
 <hr class="foo" id="bar" >
 
+Br's:
+
+<br>
+
+<br/>
+
+<br />
+
+<br >
