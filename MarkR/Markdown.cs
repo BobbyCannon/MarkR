@@ -330,6 +330,7 @@ namespace MarkR
 
 			Cleanup();
 
+			text = text.Replace(AutoLinkPreventionMarker, "://");
 			return text + "\n";
 		}
 
@@ -1259,7 +1260,7 @@ namespace MarkR
 		private static string HyperlinkEvaluator(Match match)
 		{
 			var link = match.Groups[1].Value;
-			return $"<a href=\"{EncodeProblemUrlChars(link)}\">{link}</a>";
+			return $"<a href=\"{EncodeProblemUrlChars(link)}\">{SaveFromAutoLinking(link)}</a>";
 		}
 
 		private string ImageInlineEvaluator(Match match)
@@ -1562,7 +1563,6 @@ namespace MarkR
 			// Must come after DoAnchors(), because you can use < and >
 			// delimiters in inline links like [this](<url>).
 			text = DoAutoLinks(text);
-			text = text.Replace(AutoLinkPreventionMarker, "://");
 			text = EncodeAmpsAndAngles(text);
 			text = DoItalicsAndBold(text);
 			text = DoHardBreaks(text);
@@ -1570,7 +1570,7 @@ namespace MarkR
 			return text;
 		}
 
-		private string SaveFromAutoLinking(string s)
+		private static string SaveFromAutoLinking(string s)
 		{
 			return s.Replace("://", AutoLinkPreventionMarker);
 		}
