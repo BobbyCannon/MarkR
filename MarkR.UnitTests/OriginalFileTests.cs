@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MarkR.UnitTests
 {
 	[TestClass]
-	public class FileTests
+	public class OriginalFileTests
 	{
 		#region Methods
 
@@ -20,15 +20,13 @@ namespace MarkR.UnitTests
 
 			foreach (var file in files)
 			{
-				//Console.WriteLine(file);
-
 				var resultFile = file.Replace(".text", ".html");
 				var expected = File.ReadAllText(resultFile);
 				var markdown = File.ReadAllText(file);
 				var actual = parser.Transform(markdown);
 
+				// This is here so we can easily compare the difference in GIT.
 				//File.WriteAllText(resultFile, actual);
-
 				Assert.AreEqual(expected, actual);
 			}
 		}

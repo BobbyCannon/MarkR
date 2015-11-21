@@ -49,8 +49,8 @@ namespace MarkR
 		private static readonly Regex _newlinesLeadingTrailing = new Regex(@"^\n+|\n+\z", RegexOptions.Compiled);
 		private static readonly Regex _newlinesMultiple = new Regex(@"\n{2,}", RegexOptions.Compiled);
 		private static readonly string AutoLinkPreventionMarker = "\x1AP"; // temporarily replaces "://" where auto-linking shouldn't happen;
-		private static readonly Regex _linkDef = new Regex(string.Format(@"
-                        ^[ ]{{0,{0}}}\[([^\[\]]+)\]:  # id = $1
+		private static readonly Regex _linkDef = new Regex($@"
+                        ^[ ]{{0,{_tabWidth - 1}}}\[([^\[\]]+)\]:  # id = $1
                           [ ]*
                           \n?                   # maybe *one* newline
                           [ ]*
@@ -65,7 +65,7 @@ namespace MarkR
                             ["")]
                             [ ]*
                         )?                      # title is optional
-                        (?:\n+|\Z)", _tabWidth - 1), RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+                        (?:\n+|\Z)", RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 		private static readonly Regex _blocksHtml = new Regex(GetBlockPattern(), RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
 
 		private static readonly Regex _htmlTokens = new Regex(@"
@@ -76,10 +76,10 @@ namespace MarkR
 			" # match <tag> and </tag>",
 			RegexOptions.Multiline | RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
-		private static readonly Regex _anchorRef = new Regex(string.Format(@"
+		private static readonly Regex _anchorRef = new Regex($@"
             (                               # wrap whole match in $1
                 \[
-                    ({0})                   # link text = $2
+                    ({GetNestedBracketsPattern()})                   # link text = $2
                 \]
 
                 [ ]?                        # one optional space
@@ -88,16 +88,16 @@ namespace MarkR
                 \[
                     (.*?)                   # id = $3
                 \]
-            )", GetNestedBracketsPattern()), RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+            )", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
-		private static readonly Regex _anchorInline = new Regex(string.Format(@"
+		private static readonly Regex _anchorInline = new Regex($@"
                 (                           # wrap whole match in $1
                     \[
-                        ({0})               # link text = $2
+                        ({GetNestedBracketsPattern()})               # link text = $2
                     \]
                     \(                      # literal paren
                         [ ]*
-                        ({1})               # href = $3
+                        ({GetNestedParensPattern()})               # href = $3
                         [ ]*
                         (                   # $4
                         (['""])           # quote char = $5
@@ -106,7 +106,7 @@ namespace MarkR
                         [ ]*                # ignore any spaces between closing quote and )
                         )?                  # title is optional
                     \)
-                )", GetNestedBracketsPattern(), GetNestedParensPattern()),
+                )",
 			RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
 		private static readonly Regex _anchorRefShortcut = new Regex(@"
@@ -130,7 +130,7 @@ namespace MarkR
 
                     )", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
-		private static readonly Regex _imagesInline = new Regex(string.Format(@"
+		private static readonly Regex _imagesInline = new Regex($@"
               (                     # wrap whole match in $1
                 !\[
                     (.*?)           # alt text = $2
@@ -138,7 +138,7 @@ namespace MarkR
                 \s?                 # one optional whitespace character
                 \(                  # literal paren
                     [ ]*
-                    ({0})           # href = $3
+                    ({GetNestedParensPattern()})           # href = $3
                     [ ]*
                     (               # $4
                     (['""])       # quote char = $5
@@ -147,7 +147,7 @@ namespace MarkR
                     [ ]*
                     )?              # title is optional
                 \)
-              )", GetNestedParensPattern()),
+              )",
 			RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
 		private static readonly Regex _headerAtx = new Regex(@"
@@ -235,15 +235,12 @@ namespace MarkR
                     (?<!`)
                     \1
                     (?!`)", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
-		private static readonly Regex _githubCodeBlock = new Regex(@"(?<!\\)(`{3,}) *(\S+)? *\n([\s\S]+?)\s*\1 *(?:\n+|$)", RegexOptions.Compiled);
+		private static readonly Regex _githubCodeBlock = new Regex(@"(`{3})(\S+)?\n([\s\S][^`]+)\n(`{3})", RegexOptions.Compiled);
 		private static readonly Regex _italic = new Regex(@"(\*|_) (?=\S) (.+?) (?<=\S) \1", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 		private static readonly Regex _autolinkBare = new Regex(@"(<|="")?\b(https?|ftp)(://" + _charInsideUrl + "*" + _charEndingUrl + ")(?=$|\\W)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private static readonly Regex _endCharRegex = new Regex(_charEndingUrl, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private static readonly Regex _outDent = new Regex(@"^[ ]{1," + _tabWidth + @"}", RegexOptions.Multiline | RegexOptions.Compiled);
 		private static readonly Regex _amps = new Regex(@"&(?!((#[0-9]+)|(#[xX][a-fA-F0-9]+)|([a-zA-Z][a-zA-Z0-9]*));)", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
-
-		private static readonly Regex _leftAngles = new Regex(@"<(?![A-Za-z/?\$!])", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
-		private static readonly Regex _rightAngles = new Regex(@"(?<!br )(?<!hr[a-zA-Z"" =]* )(?<!h[1-6])((?<![/])(?<![a-zA-Z""'-]))>", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
 		private static readonly Regex _backslashEscapes;
 
@@ -251,19 +248,23 @@ namespace MarkR
 
 		private readonly Dictionary<string, string> _htmlBlocks = new Dictionary<string, string>();
 
+		private static readonly Regex _leftAngles = new Regex(@"<(?![A-Za-z/?\$!])", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
 		private int _listLevel;
 
 		private static readonly char[] _problemUrlChars = @"""'*()[]$:_".ToCharArray();
+		private static readonly Regex _rightAngles = new Regex(@"(?<!br )(?<!hr[a-zA-Z"" =]* )(?<!h[1-6])((?<![/])(?<![a-zA-Z""'-]))>", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 		private readonly Dictionary<string, string> _titles = new Dictionary<string, string>();
 		private static readonly Regex _unescapes = new Regex("\x1A" + "E\\d+E", RegexOptions.Compiled);
 		private readonly Dictionary<string, string> _urls = new Dictionary<string, string>();
+		private readonly List<CodeBlock> _codeBlocks = new List<CodeBlock>();
 
 		#endregion
 
 		#region Constructors
 
 		/// <summary>
-		/// In the static constuctor we'll initialize what stays the same across all transforms.
+		/// In the static constructor we'll initialize what stays the same across all transforms.
 		/// </summary>
 		static Markdown()
 		{
@@ -340,9 +341,11 @@ namespace MarkR
 
 			url = EncodeProblemUrlChars(url);
 			url = EscapeBoldItalic(url);
+
 			if (url.StartsWith("<") && url.EndsWith(">"))
 			{
-				url = url.Substring(1, url.Length - 2); // remove <>'s surrounding URL, if present            
+				// remove <>'s surrounding URL, if present
+				url = url.Substring(1, url.Length - 2);
 			}
 
 			var args = new LinkEventArgs(url, url, linkText, "");
@@ -355,6 +358,11 @@ namespace MarkR
 				title = AttributeEncode(title);
 				title = EscapeBoldItalic(title);
 				result += $" title=\"{title}\"";
+			}
+
+			if (args.CssClass.Length > 0)
+			{
+				result += $" class=\"{args.CssClass}\"";
 			}
 
 			result += $">{linkText}</a>";
@@ -394,6 +402,11 @@ namespace MarkR
 					result += " title=\"" + title + "\"";
 				}
 
+				if (args.CssClass.Length > 0)
+				{
+					result += $" class=\"{args.CssClass}\"";
+				}
+
 				result += ">" + linkText + "</a>";
 			}
 			else
@@ -429,6 +442,11 @@ namespace MarkR
 					var title = AttributeEncode(_titles[linkId]);
 					title = EscapeBoldItalic(title);
 					result += " title=\"" + title + "\"";
+				}
+
+				if (args.CssClass.Length > 0)
+				{
+					result += $" class=\"{args.CssClass}\"";
 				}
 
 				result += $">{linkText}</a>";
@@ -615,7 +633,24 @@ namespace MarkR
 			return _codeSpan.Replace(text, CodeSpanEvaluator);
 		}
 
-		private string DoGithubCodeBlocks(string text)
+		private string EndGithubCodeBlocks(string text)
+		{
+			// Reinsert the code block.
+			foreach (var codeBlock in _codeBlocks)
+			{
+				var newBlock = string.IsNullOrWhiteSpace(codeBlock.Type)
+					? string.Concat("<pre><code>", codeBlock.Code, "</code></pre>")
+					: string.Concat("<pre><code class=\"language-", codeBlock.Type, "\">", codeBlock.Code, "</code></pre>");
+
+				text = text
+					//.Replace($"<p>{codeBlock.Id}</p>", newBlock)
+					.Replace(codeBlock.Id.ToString(), newBlock);
+			}
+
+			return text;
+		}
+
+		private string BeginGithubCodeBlocks(string text)
 		{
 			return _githubCodeBlock.Replace(text, GithubCodeEvaluator);
 		}
@@ -1137,8 +1172,10 @@ namespace MarkR
 			codeBlock = EncodeCode(codeBlock);
 			codeBlock = _newlinesLeadingTrailing.Replace(codeBlock, "");
 
-			return string.Concat("\n\n<pre><code class=\"language-", typeBlock, "\">", codeBlock,
-				"\n</code></pre>\n\n");
+			var response = new CodeBlock { Id = Guid.NewGuid(), Code = codeBlock, Type = typeBlock };
+            _codeBlocks.Add(response);
+
+			return response.Id.ToString();
 		}
 
 		private static string HandleTrailingParens(Match match)
@@ -1216,7 +1253,7 @@ namespace MarkR
 			return string.Concat("\n\n", key, "\n\n");
 		}
 
-		private string HyperlinkEvaluator(Match match)
+		private static string HyperlinkEvaluator(Match match)
 		{
 			var link = match.Groups[1].Value;
 			return $"<a href=\"{EncodeProblemUrlChars(link)}\">{link}</a>";
@@ -1276,13 +1313,16 @@ namespace MarkR
 			altText = EscapeImageAltText(AttributeEncode(altText));
 			url = EncodeProblemUrlChars(url);
 			url = EscapeBoldItalic(url);
+
 			var result = $"<img src=\"{url}\" alt=\"{altText}\"";
+
 			if (!string.IsNullOrEmpty(title))
 			{
 				title = AttributeEncode(EscapeBoldItalic(title));
 				result += $" title=\"{title}\"";
 			}
-			result += "/>";
+
+			result += " />";
 			return result;
 		}
 
@@ -1364,10 +1404,7 @@ namespace MarkR
 				output.Append(line);
 			}
 
-			output.Append('\n');
-
-			// add two newlines to the end before return
-			return output.Append("\n\n").ToString();
+			return output.Append('\n').ToString();
 		}
 
 		/// <summary>
@@ -1488,10 +1525,10 @@ namespace MarkR
 		/// </summary>
 		private string RunBlockGamut(string text, bool unhash = true)
 		{
+			text = BeginGithubCodeBlocks(text);
 			text = DoHeaders(text);
 			text = DoHorizontalRules(text);
 			text = DoLists(text);
-			text = DoGithubCodeBlocks(text);
 			text = DoCodeBlocks(text);
 			text = DoBlockQuotes(text);
 
@@ -1501,6 +1538,7 @@ namespace MarkR
 			// <p> tags around block-level tags.
 			text = HashHtmlBlocks(text);
 			text = FormParagraphs(text, unhash);
+			text = EndGithubCodeBlocks(text);
 
 			return text;
 		}
@@ -1560,6 +1598,7 @@ namespace MarkR
 			_urls.Clear();
 			_titles.Clear();
 			_htmlBlocks.Clear();
+			_codeBlocks.Clear();
 			_listLevel = 0;
 		}
 
@@ -1651,6 +1690,13 @@ namespace MarkR
 			}
 
 			#endregion
+		}
+
+		private struct CodeBlock
+		{
+			public Guid Id { get; set; }
+			public string Code { get; set; }
+			public string Type { get; set; }
 		}
 
 		#endregion

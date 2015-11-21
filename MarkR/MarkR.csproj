@@ -44,7 +44,6 @@
     <Compile Include="ImageEventArgs.cs" />
     <Compile Include="LinkEventArgs.cs" />
     <Compile Include="Markdown.cs" />
-    <Compile Include="MarkdownOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

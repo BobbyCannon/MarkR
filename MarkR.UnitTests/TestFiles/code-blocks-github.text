@@ -1,0 +1,28 @@
+﻿# My Page
+
+This is some text.
+
+```C#
+public struct Person {
+	public string Name { get; set; }
+	public int Age { get; set; }
+}
+```
+
+Breaking text
+
+```JS
+var test = 'foo';
+
+// This is my method.
+function PrintTest(value) {
+	console.log(value);
+}
+
+PrintTest(test);
+```
+```
+Code fence without language specifier.
+```
+
+``` Single Line Fences ```
