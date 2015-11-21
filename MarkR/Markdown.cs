@@ -660,7 +660,7 @@ namespace MarkR
 		/// </summary>
 		private string DoHardBreaks(string text)
 		{
-			return Regex.Replace(text, "\n", "<br />\n");
+			return Regex.Replace(text, "(?<!li>)(?<!ol>)(?<!ul>)\n", "<br />\n");
 		}
 
 		/// <summary>
@@ -736,7 +736,10 @@ namespace MarkR
 		{
 			// We use a different prefix before nested lists than top-level lists.
 			// See extended comment in _ProcessListItems().
-			text = _listLevel > 0 ? _listNested.Replace(text, GetListEvaluator(isInsideParagraphlessListItem)) : _listTopLevel.Replace(text, GetListEvaluator());
+			text = _listLevel > 0 
+				? _listNested.Replace(text, GetListEvaluator(isInsideParagraphlessListItem)) 
+				: _listTopLevel.Replace(text, GetListEvaluator());
+
 			return text;
 		}
 
@@ -1508,7 +1511,7 @@ namespace MarkR
 		}
 
 		/// <summary>
-		/// this is to emulate what's evailable in PHP
+		/// this is to emulate what's available in PHP
 		/// </summary>
 		private static string RepeatString(string text, int count)
 		{

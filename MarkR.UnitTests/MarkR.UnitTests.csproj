@@ -57,6 +57,7 @@
     <Compile Include="HeaderTests.cs" />
     <Compile Include="LinkTests.cs" />
     <Compile Include="CodeBlockTests.cs" />
+    <Compile Include="ListTests.cs" />
     <Content Include="TestFiles\!sandbox.html" />
     <Content Include="TestFiles\code-blocks-github.html" />
   </ItemGroup>

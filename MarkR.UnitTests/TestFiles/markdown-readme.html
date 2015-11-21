@@ -33,7 +33,7 @@ Markdown also requires the standard Perl library module <code>Digest::MD5</code>
 <p>Markdown works with Movable Type version 2.6 or later (including <br />
 MT 3.0 or later).</p>
 
-<p><ol><br />
+<p><ol>
 <li><p>Copy the "Markdown.pl" file into your Movable Type "plugins"<br /><br />
 directory. The "plugins" directory should be in the same directory<br /><br />
 as "mt.cgi"; if the "plugins" directory doesn't already exist, use<br /><br />
@@ -64,27 +64,27 @@ Markdown to produce HTML 4 output, see "Configuration", below.
 
 <p>Markdown works with Blosxom version 2.x.</p>
 
-<p><ol><br />
+<p><ol>
 <li><p>Rename the "Markdown.pl" plug-in to "Markdown" (case is<br /><br />
 important). Movable Type requires plug-ins to have a ".pl"<br /><br />
-extension; Blosxom forbids it.</p></li><br />
+extension; Blosxom forbids it.</p></li>
 <li><p>Copy the "Markdown" plug-in file to your Blosxom plug-ins folder.<br /><br />
 If you're not sure where your Blosxom plug-ins folder is, see the<br /><br />
-Blosxom documentation for information.</p></li><br />
+Blosxom documentation for information.</p></li>
 <li><p>That's it. The entries in your weblog will now automatically be<br /><br />
-processed by Markdown.</p></li><br />
+processed by Markdown.</p></li>
 <li><p>If you'd like to apply Markdown formatting only to certain posts,<br /><br />
 rather than all of them, see Jason Clark's instructions for using<br /><br />
 Markdown in conjunction with Blosxom's Meta plugin:</p></p>
 
-<p><p><a href="http://jclark.org/weblog/WebDev/Blosxom/Markdown.html"><a href="http://jclark.org/weblog/WebDev/Blosxom/Markdown.html">http://jclark.org/weblog/WebDev/Blosxom/Markdown.html</a></a></p></li><br />
-</ol><br />
+<p><p><a href="http://jclark.org/weblog/WebDev/Blosxom/Markdown.html"><a href="http://jclark.org/weblog/WebDev/Blosxom/Markdown.html">http://jclark.org/weblog/WebDev/Blosxom/Markdown.html</a></a></p></li>
+</ol>
 <h3>BBEdit</h3></p>
 
 <p>Markdown works with BBEdit 6.1 or later on Mac OS X. (It also works<br />
 with BBEdit 5.1 or later and MacPerl 5.6.1 on Mac OS 8.6 or later.)</p>
 
-<p><ol><br />
+<p><ol>
 <li><p>Copy the "Markdown.pl" file to appropriate filters folder in your<br /><br />
 "BBEdit Support" folder. On Mac OS X, this should be:</p></p>
 
@@ -95,11 +95,11 @@ BBEdit Support/Unix Support/Unix Filters/
 <p><p>See the BBEdit documentation for more details on the location of<br /><br />
 these folders.</p></p>
 
-<p><p>You can rename "Markdown.pl" to whatever you wish.</p></li><br />
+<p><p>You can rename "Markdown.pl" to whatever you wish.</p></li>
 <li><p>That's it. To use Markdown, select some text in a BBEdit document,<br /><br />
 then choose Markdown from the Filters sub-menu in the "#!" menu, or<br /><br />
-the Filters floating palette</p></li><br />
-</ol><br />
+the Filters floating palette</p></li>
+</ol>
 <h2>Configuration</h2></p>
 
 <p>By default, Markdown produces XHTML output for tags with empty elements.<br />
@@ -161,7 +161,7 @@ markdown@daringfireball.net.</p>
 
 <p>1.0.1 (14 Dec 2004):</p>
 
-<p><ul><br />
+<p><ul>
 <li><p>Changed the syntax rules for code blocks and spans. Previously,<br /><br />
 backslash escapes for special Markdown characters were processed<br /><br />
 everywhere other than within inline HTML tags. Now, the contents<br /><br />
@@ -172,7 +172,7 @@ backslashes.</p></p>
 
 <p><p><strong>NOTE</strong>: This changes the syntax from all previous versions of<br /><br />
 Markdown. Code blocks and spans involving backslash characters<br /><br />
-will now generate different output than before.</p></li><br />
+will now generate different output than before.</p></li>
 <li><p>Tweaked the rules for link definitions so that they must occur<br /><br />
 within three spaces of the left margin. Thus if you indent a link<br /><br />
 definition by four spaces or a tab, it will now be a code block.</p></p>
@@ -276,7 +276,7 @@ is only for the benefit of Blosxom users, because Blosxom<br />
 [1]: http://sources.wikipedia.org/wiki/Middle_East_Policy_(Chomsky)
 </code></pre>
 
-<p><p>"Chomsky" was being erroneously treated as the URL's title.</p></li><br />
+<p><p>"Chomsky" was being erroneously treated as the URL's title.</p></li>
 <li><p>At some point during 1.0's beta cycle, I changed every sub's<br /><br />
 argument fetching from this idiom:</p></p>
 
@@ -294,8 +294,8 @@ my $text = shift || return '';
 if the input was empty. This introduced a bug, though:<br /><br />
 if the input to any function was the single-character string<br /><br />
 "0", it would also evaluate as false and return immediately.<br /><br />
-How silly. Now fixed.</p></li><br />
-</ul><br />
+How silly. Now fixed.</p></li>
+</ul>
 <h2>Donations</h2></p>
 
 <p>Donations to support Markdown's development are happily accepted. See:<br />
@@ -311,16 +311,16 @@ All rights reserved.</p>
 modification, are permitted provided that the following conditions are<br />
 met:</p>
 
-<p><ul><br />
+<p><ul>
 <li><p>Redistributions of source code must retain the above copyright notice,<br /><br />
-this list of conditions and the following disclaimer.</p></li><br />
+this list of conditions and the following disclaimer.</p></li>
 <li><p>Redistributions in binary form must reproduce the above copyright<br /><br />
 notice, this list of conditions and the following disclaimer in the<br /><br />
-documentation and/or other materials provided with the distribution.</p></li><br />
+documentation and/or other materials provided with the distribution.</p></li>
 <li><p>Neither the name "Markdown" nor the names of its contributors may<br /><br />
 be used to endorse or promote products derived from this software<br /><br />
-without specific prior written permission.</p></li><br />
-</ul><br />
+without specific prior written permission.</p></li>
+</ul>
 This software is provided by the copyright holders and contributors "as<br />
 is" and any express or implied warranties, including, but not limited<br />
 to, the implied warranties of merchantability and fitness for a<br />
