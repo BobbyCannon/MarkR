@@ -58,42 +58,37 @@
     <Compile Include="LinkTests.cs" />
     <Compile Include="CodeBlockTests.cs" />
     <Compile Include="ListTests.cs" />
+    <Compile Include="UnitTest1.cs" />
     <Content Include="TestFiles\!sandbox.html" />
-    <Content Include="TestFiles\code-blocks-github.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MarkR\MarkR.csproj">
-      <Project>{f8b8528c-32a3-463e-9098-41bb6056540a}</Project>
-      <Name>MarkR</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
     <Content Include="TestFiles\amps-and-angle-encoding.html" />
     <Content Include="TestFiles\auto-links.html" />
     <Content Include="TestFiles\backslash-escapes.html" />
+    <Content Include="TestFiles\backslash-escapes2.html" />
     <Content Include="TestFiles\blockquotes-with-code-blocks.html" />
     <Content Include="TestFiles\code-block-in-a-list-item.html" />
     <Content Include="TestFiles\code-blocks.html" />
     <Content Include="TestFiles\code-inside-list.html" />
     <Content Include="TestFiles\code-spans.html" />
+    <Content Include="TestFiles\code-spans2.html" />
     <Content Include="TestFiles\email-auto-links.html" />
     <Content Include="TestFiles\emphasis.html" />
     <Content Include="TestFiles\failure-to-escape-less-than.html" />
     <Content Include="TestFiles\hard-wrapped-paragraphs-with-list-like-lines.html" />
     <Content Include="TestFiles\headers.html" />
     <Content Include="TestFiles\horizontal-rules.html" />
-    <Content Include="TestFiles\html-comment-edge-case.html" />
+    <Content Include="TestFiles\horizontal-rules2.html" />
     <Content Include="TestFiles\images.html" />
-    <Content Include="TestFiles\indented-code-in-list-item.html" />
     <Content Include="TestFiles\inline-html-advanced.html" />
     <Content Include="TestFiles\inline-html-comments.html" />
+    <Content Include="TestFiles\inline-html-comments2.html" />
     <Content Include="TestFiles\inline-html-simple.html" />
+    <Content Include="TestFiles\inline-html-simple2.html" />
     <Content Include="TestFiles\inline-html-span.html" />
-    <Content Include="TestFiles\ins-and-del.html" />
+    <Content Include="TestFiles\ins-del.html" />
     <Content Include="TestFiles\line-endings-cr.html" />
     <Content Include="TestFiles\line-endings-crlf.html" />
     <Content Include="TestFiles\line-endings-lf.html" />
+    <Content Include="TestFiles\links,-inline-style.html" />
     <Content Include="TestFiles\links-inline-style.html" />
     <Content Include="TestFiles\links-reference-style.html" />
     <Content Include="TestFiles\links-shortcut-references.html" />
@@ -113,38 +108,46 @@
     <Content Include="TestFiles\tabs.html" />
     <Content Include="TestFiles\tidyness.html" />
     <Content Include="TestFiles\tight-blocks.html" />
-    <Content Include="TestFiles\unordered-list-and-horizontal-rules.html" />
-    <Content Include="TestFiles\unordered-list-followed-by-ordered-list.html" />
-    <Content Include="TestFiles\unpredictable-sublists.html" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MarkR\MarkR.csproj">
+      <Project>{f8b8528c-32a3-463e-9098-41bb6056540a}</Project>
+      <Name>MarkR</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="TestFiles\!sandbox.text" />
     <None Include="TestFiles\amps-and-angle-encoding.text" />
     <None Include="TestFiles\auto-links.text" />
     <None Include="TestFiles\backslash-escapes.text" />
+    <None Include="TestFiles\backslash-escapes2.text" />
     <None Include="TestFiles\blockquotes-with-code-blocks.text" />
     <None Include="TestFiles\code-block-in-a-list-item.text" />
-    <None Include="TestFiles\code-blocks-github.text" />
     <None Include="TestFiles\code-blocks.text" />
     <None Include="TestFiles\code-inside-list.text" />
     <None Include="TestFiles\code-spans.text" />
+    <None Include="TestFiles\code-spans2.text" />
     <None Include="TestFiles\email-auto-links.text" />
     <None Include="TestFiles\emphasis.text" />
     <None Include="TestFiles\failure-to-escape-less-than.text" />
     <None Include="TestFiles\hard-wrapped-paragraphs-with-list-like-lines.text" />
     <None Include="TestFiles\headers.text" />
     <None Include="TestFiles\horizontal-rules.text" />
-    <None Include="TestFiles\html-comment-edge-case.text" />
+    <None Include="TestFiles\horizontal-rules2.text" />
     <None Include="TestFiles\images.text" />
     <None Include="TestFiles\indented-code-in-list-item.text" />
     <None Include="TestFiles\inline-html-advanced.text" />
     <None Include="TestFiles\inline-html-comments.text" />
+    <None Include="TestFiles\inline-html-comments2.text" />
     <None Include="TestFiles\inline-html-simple.text" />
+    <None Include="TestFiles\inline-html-simple2.text" />
     <None Include="TestFiles\inline-html-span.text" />
-    <None Include="TestFiles\ins-and-del.text" />
+    <None Include="TestFiles\ins-del.text" />
     <None Include="TestFiles\line-endings-cr.text" />
     <None Include="TestFiles\line-endings-crlf.text" />
     <None Include="TestFiles\line-endings-lf.text" />
+    <None Include="TestFiles\links,-inline-style.text" />
     <None Include="TestFiles\links-inline-style.text" />
     <None Include="TestFiles\links-reference-style.text" />
     <None Include="TestFiles\links-shortcut-references.text" />

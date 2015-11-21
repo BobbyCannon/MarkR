@@ -1,67 +1,29 @@
-Dashes:
-
----
-
- ---
- 
-  ---
-
-   ---
-
-	---
+Horizontal rules:
 
 - - -
-
- - - -
  
-  - - -
-
-   - - -
-
-	- - -
-
-
-Asterisks:
-
-***
-
- ***
- 
-  ***
-
-   ***
-
-	***
-
 * * *
-
- * * *
  
-  * * *
-
-   * * *
-
-	* * *
-
-
-Underscores:
-
+***
+ 
+---
+ 
 ___
 
- ___
- 
-  ___
+Not horizontal rules (testing for a bug in 1.0.1j):
 
-   ___
++++
 
-    ___
+,,,
 
-_ _ _
+===
 
- _ _ _
- 
-  _ _ _
+???
 
-   _ _ _
+AAA
 
-    _ _ _
+jjj
+
+j j j
+
+n n n

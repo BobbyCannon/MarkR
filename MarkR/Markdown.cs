@@ -660,7 +660,7 @@ namespace MarkR
 		/// </summary>
 		private string DoHardBreaks(string text)
 		{
-			return Regex.Replace(text, "(?<!li>)(?<!ol>)(?<!ul>)\n", "<br />\n");
+			return Regex.Replace(text, "(?<!li>)(?<!ol>)(?<!ul>)(?<!br>)(?<!br />)\n", "<br />\n");
 		}
 
 		/// <summary>
