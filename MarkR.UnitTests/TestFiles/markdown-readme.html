@@ -33,37 +33,41 @@ Markdown also requires the standard Perl library module <code>Digest::MD5</code>
 <p>Markdown works with Movable Type version 2.6 or later (including <br />
 MT 3.0 or later).</p>
 
-<p><ol>
+<ol>
 <li>Copy the "Markdown.pl" file into your Movable Type "plugins"</li>
 </ol>
+
 <pre><code>directory. The &quot;plugins&quot; directory should be in the same directory
 as &quot;mt.cgi&quot;; if the &quot;plugins&quot; directory doesn&#39;t already exist, use
 your FTP program to create it. Your installation should look like
 this:
 
-    (mt home)/plugins/Markdown.pl</code></pre></p>
+    (mt home)/plugins/Markdown.pl</code></pre>
 
-<p><ol>
+<ol>
 <li>Once installed, Markdown will appear as an option in Movable Type's</li>
 </ol>
+
 <pre><code>Text Formatting pop-up menu. This is selectable on a per-post basis.
 Markdown translates your posts to HTML when you publish; the posts
-themselves are stored in your MT database in Markdown format.</code></pre></p>
+themselves are stored in your MT database in Markdown format.</code></pre>
 
-<p><ol>
+<ol>
 <li>If you also install SmartyPants 1.5 (or later), Markdown will offer</li>
 </ol>
+
 <pre><code>a second text formatting option: &quot;Markdown with SmartyPants&quot;. This
 option is the same as the regular &quot;Markdown&quot; formatter, except that
 automatically uses SmartyPants to create typographically correct
 curly quotes, em-dashes, and ellipses. See the SmartyPants web page
-for more information: &lt;http://daringfireball.net/projects/smartypants/&gt;</code></pre></p>
+for more information: &lt;http://daringfireball.net/projects/smartypants/&gt;</code></pre>
 
-<p><ol>
+<ol>
 <li>To make Markdown (or "Markdown with SmartyPants") your default</li>
 </ol>
+
 <pre><code>text formatting option for new posts, go to Weblog Config -&gt;
-Preferences.</code></pre></p>
+Preferences.</code></pre>
 
 <p>Note that by default, Markdown produces XHTML output. To configure<br />
 Markdown to produce HTML 4 output, see "Configuration", below.</p>
@@ -72,39 +76,44 @@ Markdown to produce HTML 4 output, see "Configuration", below.</p>
 
 <p>Markdown works with Blosxom version 2.x.</p>
 
-<p><ol>
+<ol>
 <li>Rename the "Markdown.pl" plug-in to "Markdown" (case is</li>
 </ol>
-<pre><code>important). Movable Type requires plug-ins to have a &quot;.pl&quot;
-extension; Blosxom forbids it.</code></pre></p>
 
-<p><ol>
+<pre><code>important). Movable Type requires plug-ins to have a &quot;.pl&quot;
+extension; Blosxom forbids it.</code></pre>
+
+<ol>
 <li>Copy the "Markdown" plug-in file to your Blosxom plug-ins folder.</li>
 </ol>
-<pre><code>If you&#39;re not sure where your Blosxom plug-ins folder is, see the
-Blosxom documentation for information.</code></pre></p>
 
-<p><ol>
+<pre><code>If you&#39;re not sure where your Blosxom plug-ins folder is, see the
+Blosxom documentation for information.</code></pre>
+
+<ol>
 <li>That's it. The entries in your weblog will now automatically be</li>
 </ol>
-<pre><code>processed by Markdown.</code></pre></p>
 
-<p><ol>
+<pre><code>processed by Markdown.</code></pre>
+
+<ol>
 <li>If you'd like to apply Markdown formatting only to certain posts,</li>
 </ol>
+
 <pre><code>rather than all of them, see Jason Clark&#39;s instructions for using
 Markdown in conjunction with Blosxom&#39;s Meta plugin:
 
-&lt;http://jclark.org/weblog/WebDev/Blosxom/Markdown.html&gt;</code></pre></p>
+&lt;http://jclark.org/weblog/WebDev/Blosxom/Markdown.html&gt;</code></pre>
 
 <h3>BBEdit</h3>
 
 <p>Markdown works with BBEdit 6.1 or later on Mac OS X. (It also works<br />
 with BBEdit 5.1 or later and MacPerl 5.6.1 on Mac OS 8.6 or later.)</p>
 
-<p><ol>
+<ol>
 <li>Copy the "Markdown.pl" file to appropriate filters folder in your</li>
 </ol>
+
 <pre><code>&quot;BBEdit Support&quot; folder. On Mac OS X, this should be:
 
     BBEdit Support/Unix Support/Unix Filters/
@@ -112,33 +121,34 @@ with BBEdit 5.1 or later and MacPerl 5.6.1 on Mac OS 8.6 or later.)</p>
 See the BBEdit documentation for more details on the location of
 these folders.
 
-You can rename &quot;Markdown.pl&quot; to whatever you wish.</code></pre></p>
+You can rename &quot;Markdown.pl&quot; to whatever you wish.</code></pre>
 
-<p><ol>
+<ol>
 <li>That's it. To use Markdown, select some text in a BBEdit document,</li>
 </ol>
+
 <pre><code>then choose Markdown from the Filters sub-menu in the &quot;#!&quot; menu, or
-the Filters floating palette</code></pre></p>
+the Filters floating palette</code></pre>
 
 <h2>Configuration</h2>
 
 <p>By default, Markdown produces XHTML output for tags with empty elements.<br />
 E.g.:</p>
 
-<p><pre><code>&lt;br /&gt;</code></pre></p>
+<pre><code>&lt;br /&gt;</code></pre>
 
 <p>Markdown can be configured to produce HTML-style tags; e.g.:</p>
 
-<p><pre><code>&lt;br&gt;</code></pre></p>
+<pre><code>&lt;br&gt;</code></pre>
 
 <h3>Movable Type</h3>
 
 <p>You need to use a special <code>MTMarkdownOptions</code> container tag in each<br />
 Movable Type template where you want HTML 4-style output:</p>
 
-<p><pre><code>&lt;MTMarkdownOptions output=&#39;html4&#39;&gt;
+<pre><code>&lt;MTMarkdownOptions output=&#39;html4&#39;&gt;
     ... put your entry content here ...
-&lt;/MTMarkdownOptions&gt;</code></pre></p>
+&lt;/MTMarkdownOptions&gt;</code></pre>
 
 <p>The easiest way to use MTMarkdownOptions is probably to put the<br />
 opening tag right after your <code>&lt;body&gt;</code> tag, and the closing tag right<br />
@@ -148,16 +158,16 @@ before <code>&lt;/body&gt;</code>.</p>
 publish the raw Markdown-formatted text without translation into<br />
 (X)HTML, set the <code>output</code> attribute to 'raw':</p>
 
-<p><pre><code>&lt;MTMarkdownOptions output=&#39;raw&#39;&gt;
+<pre><code>&lt;MTMarkdownOptions output=&#39;raw&#39;&gt;
     ... put your entry content here ...
-&lt;/MTMarkdownOptions&gt;</code></pre></p>
+&lt;/MTMarkdownOptions&gt;</code></pre>
 
 <h3>Command-Line</h3>
 
 <p>Use the <code>--html4tags</code> command-line switch to produce HTML output from a<br />
 Unix-style command line. E.g.:</p>
 
-<p><pre><code>% perl Markdown.pl --html4tags foo.text</code></pre></p>
+<pre><code>% perl Markdown.pl --html4tags foo.text</code></pre>
 
 <p>Type `perldoc Markdown.pl`, or read the POD documentation within the<br />
 Markdown.pl source code for more information.</p>
@@ -171,9 +181,10 @@ markdown@daringfireball.net.</p>
 
 <p>1.0.1 (14 Dec 2004):</p>
 
-<p><ul>
+<ul>
 <li>Changed the syntax rules for code blocks and spans. Previously,</li>
 </ul>
+
 <pre><code>backslash escapes for special Markdown characters were processed
 everywhere other than within inline HTML tags. Now, the contents
 of code blocks and spans are no longer processed for backslash
@@ -183,11 +194,12 @@ backslashes.
 
 **NOTE**: This changes the syntax from all previous versions of
 Markdown. Code blocks and spans involving backslash characters
-will now generate different output than before.</code></pre></p>
+will now generate different output than before.</code></pre>
 
-<p><ul>
+<ul>
 <li>Tweaked the rules for link definitions so that they must occur</li>
 </ul>
+
 <pre><code>within three spaces of the left margin. Thus if you indent a link
 definition by four spaces or a tab, it will now be a code block.
 
@@ -196,37 +208,43 @@ definition by four spaces or a tab, it will now be a code block.
         [b]: /url/  &quot;Indented 4 spaces, this is a code block&quot;
 
 **IMPORTANT**: This may affect existing Markdown content if it
-contains link definitions indented by 4 or more spaces.</code></pre></p>
+contains link definitions indented by 4 or more spaces.</code></pre>
 
-<p><ul>
-<li>Added <code>&amp;gt;</code>, `+`, and `-` to the list of backslash-escapable</li>
+<ul>
+<li>Added `&gt;`, `+`, and `-` to the list of backslash-escapable</li>
 </ul>
-<pre><code>characters. These should have been done when these characters
-were added as unordered list item markers.</code></pre></p>
 
-<p><ul>
+<pre><code>characters. These should have been done when these characters
+were added as unordered list item markers.</code></pre>
+
+<ul>
 <li>Trailing spaces and tabs following HTML comments and <code>&lt;hr/&gt;</code> tags</li>
 </ul>
-<pre><code>are now ignored.</code></pre></p>
 
-<p><ul>
-<li>Inline links using <code>&amp;lt;</code> and <code>&amp;gt;</code> URL delimiters weren't working:</li>
+<pre><code>are now ignored.</code></pre>
+
+<ul>
+<li>Inline links using `&lt;` and `&gt;` URL delimiters weren't working:</li>
 </ul>
-<pre><code>    like [this](&lt;http://example.com/&gt;)</code></pre></p>
 
-<p><ul>
+<pre><code>    like [this](&lt;http://example.com/&gt;)</code></pre>
+
+<ul>
 <li>Added a bit of tolerance for trailing spaces and tabs after</li>
 </ul>
-<pre><code>Markdown hr&#39;s.</code></pre></p>
 
-<p><ul>
+<pre><code>Markdown hr&#39;s.</code></pre>
+
+<ul>
 <li>Fixed bug where auto-links were being processed within code spans:</li>
 </ul>
-<pre><code>    like this: `&lt;http://example.com/&gt;`</code></pre></p>
 
-<p><ul>
+<pre><code>    like this: `&lt;http://example.com/&gt;`</code></pre>
+
+<ul>
 <li>Sort-of fixed a bug where lines in the middle of hard-wrapped</li>
 </ul>
+
 <pre><code>paragraphs, which lines look like the start of a list item,
 would accidentally trigger the creation of a list. E.g. a
 paragraph that looked like this:
@@ -244,74 +262,84 @@ properly:
         as a sub-list.
 
 Given Markdown&#39;s list-creation rules, I&#39;m not sure this can
-be fixed.</code></pre></p>
+be fixed.</code></pre>
 
-<p><ul>
+<ul>
 <li>Standalone HTML comments are now handled; previously, they'd get</li>
 </ul>
-<pre><code>wrapped in a spurious `&lt;p&gt;` tag.</code></pre></p>
 
-<p><ul>
+<pre><code>wrapped in a spurious `&lt;p&gt;` tag.</code></pre>
+
+<ul>
 <li><p>Fix for horizontal rules preceded by 2 or 3 spaces.</p></li>
 <li><p><code>&lt;hr&gt;</code> HTML tags in must occur within three spaces of left</p></li>
 </ul>
-<pre><code>margin. (With 4 spaces or a tab, they should be code blocks, but
-weren&#39;t before this fix.)</code></pre></p>
 
-<p><ul>
+<pre><code>margin. (With 4 spaces or a tab, they should be code blocks, but
+weren&#39;t before this fix.)</code></pre>
+
+<ul>
 <li>Capitalized "With" in "Markdown With SmartyPants" for</li>
 </ul>
-<pre><code>consistency with the same string label in SmartyPants.pl.
-(This fix is specific to the MT plug-in interface.)</code></pre></p>
 
-<p><ul>
+<pre><code>consistency with the same string label in SmartyPants.pl.
+(This fix is specific to the MT plug-in interface.)</code></pre>
+
+<ul>
 <li>Auto-linked email address can now optionally contain</li>
 </ul>
+
 <pre><code>a &#39;mailto:&#39; protocol. I.e. these are equivalent:
 
     &lt;mailto:user@example.com&gt;
-    &lt;user@example.com&gt;</code></pre></p>
+    &lt;user@example.com&gt;</code></pre>
 
-<p><ul>
+<ul>
 <li>Fixed annoying bug where nested lists would wind up with</li>
 </ul>
-<pre><code>spurious (and invalid) `&lt;p&gt;` tags.</code></pre></p>
 
-<p><ul>
+<pre><code>spurious (and invalid) `&lt;p&gt;` tags.</code></pre>
+
+<ul>
 <li>You can now write empty links:</li>
 </ul>
+
 <pre><code>    [like this]()
 
 and they&#39;ll be turned into anchor tags with empty href attributes.
-This should have worked before, but didn&#39;t.</code></pre></p>
+This should have worked before, but didn&#39;t.</code></pre>
 
-<p><ul>
+<ul>
 <li><code>***this***</code> and <code>___this___</code> are now turned into</li>
 </ul>
+
 <pre><code>    &lt;strong&gt;&lt;em&gt;this&lt;/em&gt;&lt;/strong&gt;
 
 Instead of
 
     &lt;strong&gt;&lt;em&gt;this&lt;/strong&gt;&lt;/em&gt;
 
-which isn&#39;t valid. (Thanks to Michel Fortin for the fix.)</code></pre></p>
+which isn&#39;t valid. (Thanks to Michel Fortin for the fix.)</code></pre>
 
-<p><ul>
+<ul>
 <li>Added a new substitution in <code>_EncodeCode()</code>: s/\$/&#036;/g; This</li>
 </ul>
-<pre><code>is only for the benefit of Blosxom users, because Blosxom
-(sometimes?) interpolates Perl scalars in your article bodies.</code></pre></p>
 
-<p><ul>
+<pre><code>is only for the benefit of Blosxom users, because Blosxom
+(sometimes?) interpolates Perl scalars in your article bodies.</code></pre>
+
+<ul>
 <li>Fixed problem for links defined with urls that include parens, e.g.:</li>
 </ul>
+
 <pre><code>    [1]: http://sources.wikipedia.org/wiki/Middle_East_Policy_(Chomsky)
 
-&quot;Chomsky&quot; was being erroneously treated as the URL&#39;s title.</code></pre></p>
+&quot;Chomsky&quot; was being erroneously treated as the URL&#39;s title.</code></pre>
 
-<p><ul>
+<ul>
 <li>At some point during 1.0's beta cycle, I changed every sub's</li>
 </ul>
+
 <pre><code>argument fetching from this idiom:
 
     my $text = shift;
@@ -324,7 +352,7 @@ The idea was to keep Markdown from doing any work in a sub
 if the input was empty. This introduced a bug, though:
 if the input to any function was the single-character string
 &quot;0&quot;, it would also evaluate as false and return immediately.
-How silly. Now fixed.</code></pre></p>
+How silly. Now fixed.</code></pre>
 
 <h2>Donations</h2>
 
@@ -341,7 +369,7 @@ All rights reserved.</p>
 modification, are permitted provided that the following conditions are<br />
 met:</p>
 
-<p><ul>
+<ul>
 <li><p>Redistributions of source code must retain the above copyright notice,<br />
 this list of conditions and the following disclaimer.</p></li>
 <li><p>Redistributions in binary form must reproduce the above copyright<br />
@@ -351,7 +379,8 @@ documentation and/or other materials provided with the distribution.</p></li>
 be used to endorse or promote products derived from this software<br />
 without specific prior written permission.</p></li>
 </ul>
-This software is provided by the copyright holders and contributors "as<br />
+
+<p>This software is provided by the copyright holders and contributors "as<br />
 is" and any express or implied warranties, including, but not limited<br />
 to, the implied warranties of merchantability and fitness for a<br />
 particular purpose are disclaimed. In no event shall the copyright owner<br />

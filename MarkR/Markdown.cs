@@ -224,7 +224,7 @@ namespace MarkR
 
 		private readonly List<CodeBlock> _codeBlocks = new List<CodeBlock>();
 
-		private readonly Dictionary<string, string> _htmlBlocks = new Dictionary<string, string>();
+		private static readonly Dictionary<string, string> _hashedHtmlBlocks = new Dictionary<string, string>();
 
 		private static readonly Regex _leftAngles = new Regex(@"<(?![A-Za-z/?\$!])", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 
@@ -235,7 +235,7 @@ namespace MarkR
 		private readonly Dictionary<string, string> _titles = new Dictionary<string, string>();
 		private static readonly Regex _unescapes = new Regex("\x1A" + "E\\d+E", RegexOptions.Compiled);
 		private readonly Dictionary<string, string> _urls = new Dictionary<string, string>();
-		private readonly string[] _elementsNotToWrap = { "h1", "h2", "h3", "h4", "h5", "h6", "hr", "br", "p" };
+		private readonly string[] _elementsNotToWrap = { "h1", "h2", "h3", "h4", "h5", "h6", "hr", "br", "p", "ul", "ol", "blockquote", "pre", "code" };
 
 		#endregion
 
@@ -304,7 +304,7 @@ namespace MarkR
 			text = HashHtmlBlocks(text);
 			text = StripLinkDefinitions(text);
 			text = RunBlockGamut(text);
-			text = Unescape(text);
+			text = UnhashAndUnescape(text);
 
 			// These must be last.
 			text = EndCodeBlocks(text);
@@ -478,21 +478,22 @@ namespace MarkR
 
 		private string BlockQuoteEvaluator(Match match)
 		{
-			var bq = match.Groups[1].Value;
+			var blockQuote = match.Groups[1].Value;
 
-			bq = Regex.Replace(bq, @"^[ ]*>[ ]?", "", RegexOptions.Multiline); // trim one level of quoting
-			bq = Regex.Replace(bq, @"^[ ]+$", "", RegexOptions.Multiline); // trim whitespace-only lines
-			bq = RunBlockGamut(bq); // recurse
-			bq = Regex.Replace(bq, @"^", "  ", RegexOptions.Multiline);
-
+			blockQuote = Regex.Replace(blockQuote, @"^[ ]*>[ ]?", "", RegexOptions.Multiline); // trim one level of quoting
+			blockQuote = Regex.Replace(blockQuote, @"^[ ]+$", "", RegexOptions.Multiline); // trim whitespace-only lines
+			blockQuote = RunBlockGamut(blockQuote);
+			blockQuote = Regex.Replace(blockQuote, @"^", "  ", RegexOptions.Multiline);
+			blockQuote = blockQuote.Replace("\n\n", "\n");
+			
 			// These leading spaces screw with <pre> content, so we need to fix that:
-			bq = Regex.Replace(bq, @"(\s*<pre>.+?</pre>)", BlockQuoteEvaluator2, RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
-			bq = $"<blockquote>\n{bq}\n</blockquote>";
+			blockQuote = Regex.Replace(blockQuote, @"(\s*<pre>.+?</pre>)", BlockQuoteEvaluator2, RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
+			blockQuote = $"<blockquote>\n{blockQuote}\n</blockquote>\n\n";
+			
+			//var key = GetHashKey(bq, true);
+			//_hashedHtmlBlocks[key] = bq;
 
-			var key = GetHashKey(bq, true);
-			_htmlBlocks[key] = bq;
-
-			return "\n\n" + key + "\n\n";
+			return blockQuote;
 		}
 
 		private static string BlockQuoteEvaluator2(Match match)
@@ -703,7 +704,7 @@ namespace MarkR
 
 		private string EmailEvaluator(Match match)
 		{
-			var email = Unescape(match.Groups[1].Value);
+			var email = UnhashAndUnescape(match.Groups[1].Value);
 
 			//
 			//    Input: an email address, e.g. "foo@example.com"
@@ -776,12 +777,18 @@ namespace MarkR
 					? string.Concat("<pre><code>", codeBlock.Code, "</code></pre>")
 					: string.Concat("<pre><code class=\"language-", codeBlock.ClassType, "\">", codeBlock.Code, "</code></pre>");
 
-				text = text.Replace(codeBlock.Id, newBlock);
+				text = text
+					.Replace($"<p>{codeBlock.Id}</p>", newBlock)
+					.Replace(codeBlock.Id, newBlock);
 			}
 
 			foreach (var codeBlock in _codeBlocks.Where(x => x.BlockType == CodeBlockType.Spaces))
 			{
-				text = text.Replace(codeBlock.Id, string.Concat("<pre><code>", codeBlock.Code, "</code></pre>"));
+				var newBlock = string.Concat("<pre><code>", codeBlock.Code, "</code></pre>");
+
+				text = text
+					.Replace($"<p>{codeBlock.Id}</p>", newBlock)
+					.Replace(codeBlock.Id, newBlock);
 			}
 
 			foreach (var codeBlock in _codeBlocks.Where(x => x.BlockType == CodeBlockType.Span))
@@ -863,10 +870,9 @@ namespace MarkR
 		}
 
 		/// <summary>
-		/// splits on two or more newlines, to form "paragraphs";
-		/// each paragraph is then unhashed (if it is a hash and unhashing isn't turned off) or wrapped in HTML p tag
+		/// Splits on two or more newlines, to form "paragraphs".
 		/// </summary>
-		private string FormParagraphs(string text, bool unhash = true)
+		private string FormParagraphs(string text)
 		{
 			var grafs = _newlinesMultiple.Split(_newlinesLeadingTrailing.Replace(text, ""));
 
@@ -876,7 +882,7 @@ namespace MarkR
 
 				foreach (var element in _elementsNotToWrap)
 				{
-					if (grafs[i].StartsWith("<" + element) && (grafs[i].EndsWith(element + ">") || grafs[i].EndsWith(element + " />")))
+					if (grafs[i].StartsWith("<" + element) && ((grafs[i].EndsWith(element + ">") || grafs[i].EndsWith(element + " />"))))
 					{
 						skipGraphs = true;
 						break;
@@ -897,35 +903,13 @@ namespace MarkR
 					skipGraphs = false;
 				}
 
-				if (skipGraphs)
+				if (skipGraphs || grafs[i].StartsWith("\x1AH"))
 				{
 					continue;
 				}
-
-				if (grafs[i].StartsWith("\x1AH"))
-				{
-					// un-hash the HTML blocks
-					if (unhash)
-					{
-						var sanityCheck = 50; // just for safety, guard against an infinite loop
-						var keepGoing = true; // as long as replacements where made, keep going
-						while (keepGoing && sanityCheck > 0)
-						{
-							keepGoing = false;
-							grafs[i] = _htmlBlockHash.Replace(grafs[i], match =>
-							{
-								keepGoing = true;
-								return _htmlBlocks[match.Value];
-							});
-							sanityCheck--;
-						}
-					}
-				}
-				else
-				{
-					// do span level processing inside the block, then wrap result in <p> tags
-					grafs[i] = _leadingWhitespace.Replace(RunSpanGamut(grafs[i]), "<p>") + "</p>";
-				}
+				
+				// do span level processing inside the block, then wrap result in <p> tags
+				grafs[i] = _leadingWhitespace.Replace(RunSpanGamut(grafs[i]), "<p>") + "</p>";
 			}
 
 			return string.Join("\n\n", grafs);
@@ -1085,7 +1069,7 @@ namespace MarkR
 				var list = match.Groups[1].Value;
 				var listType = Regex.IsMatch(match.Groups[3].Value, _markerUnorderedList) ? "ul" : "ol";
 				var result = ProcessListItems(list, listType == "ul" ? _markerUnorderedList : _markerOrderedList, isInsideParagraphlessListItem);
-				result = string.Format("<{0}>\n{1}</{0}>\n", listType, result);
+				result = string.Format("<{0}>\n{1}</{0}>\n\n", listType, result);
 				return result;
 			};
 		}
@@ -1196,9 +1180,9 @@ namespace MarkR
 		{
 			var text = match.Groups[1].Value;
 			var key = GetHashKey(text, true);
-			_htmlBlocks[key] = text;
+			_hashedHtmlBlocks[key] = text;
 
-			return string.Concat("\n\n", key, "\n\n");
+			return string.Concat("\n", key, "\n");
 		}
 
 		private static string HyperlinkEvaluator(Match match)
@@ -1433,7 +1417,7 @@ namespace MarkR
 				if (containsDoubleNewline || lastItemHadADoubleNewline)
 				{
 					// we could correct any bad indentation here..
-					item = RunBlockGamut(Outdent(item) + "\n", false);
+					item = RunBlockGamut(Outdent(item) + "\n");
 				}
 				else
 				{
@@ -1470,7 +1454,7 @@ namespace MarkR
 		/// <summary>
 		/// Perform transformations that form block-level tags like paragraphs, headers, and list items.
 		/// </summary>
-		private string RunBlockGamut(string text, bool unhash = true)
+		private string RunBlockGamut(string text)
 		{
 			text = BeginCodeBlocks(text);
 			text = DoHeaders(text);
@@ -1483,7 +1467,7 @@ namespace MarkR
 			// we're escaping the markup we've just created, so that we don't wrap
 			// <p> tags around block-level tags.
 			text = HashHtmlBlocks(text);
-			text = FormParagraphs(text, unhash);
+			text = FormParagraphs(text);
 
 			return text;
 		}
@@ -1541,7 +1525,7 @@ namespace MarkR
 			// articles):
 			_urls.Clear();
 			_titles.Clear();
-			_htmlBlocks.Clear();
+			_hashedHtmlBlocks.Clear();
 			_codeBlocks.Clear();
 			_listLevel = 0;
 		}
@@ -1595,9 +1579,16 @@ namespace MarkR
 		/// <summary>
 		/// swap back in all the special characters we've hidden
 		/// </summary>
-		private static string Unescape(string s)
+		private static string UnhashAndUnescape(string text)
 		{
-			return _unescapes.Replace(s, UnescapeEvaluator);
+			text = _htmlBlockHash.Replace(text, UnhashHtmlEvaluator);
+			text = _unescapes.Replace(text, UnescapeEvaluator);
+			return text;
+		}
+
+		private static string UnhashHtmlEvaluator(Match match)
+		{
+			return _hashedHtmlBlocks[match.Value];
 		}
 
 		private static string UnescapeEvaluator(Match match)

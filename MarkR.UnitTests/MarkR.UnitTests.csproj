@@ -59,6 +59,7 @@
     <Compile Include="CodeBlockTests.cs" />
     <Compile Include="ListTests.cs" />
     <Compile Include="ParagraphTests.cs" />
+    <Compile Include="HorizantalRules.cs" />
     <Content Include="TestFiles\!sandbox.html" />
     <Content Include="TestFiles\amps-and-angle-encoding.html" />
     <Content Include="TestFiles\auto-links.html" />

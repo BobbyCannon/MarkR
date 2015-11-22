@@ -4,13 +4,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MarkR.UnitTests
 {
 	[TestClass]
-	public class ListTests
+	public class HorizantalRules
 	{
 		[TestMethod]
-		public void UnorderedList()
+		public void ValidCharactersWithSpaces()
 		{
-			var input = "* Item1\n* Item2\n* Item3";
-			var expected = "<ul>\n<li>Item1</li>\n<li>Item2</li>\n<li>Item3</li>\n</ul>\n";
+			var input = "- - -\r\n* * *\r\n_ _ _";
+			var expected = "<hr />\n\n<hr />\n\n<hr />\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);
@@ -19,10 +19,10 @@ namespace MarkR.UnitTests
 		}
 
 		[TestMethod]
-		public void OrderedList()
+		public void ValidCharacters()
 		{
-			var input = "1. Item1\n1. Item2\n1. Item3";
-			var expected = "<ol>\n<li>Item1</li>\n<li>Item2</li>\n<li>Item3</li>\n</ol>\n";
+			var input = "---\n***\n___";
+			var expected = "<hr />\n\n<hr />\n\n<hr />\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);
