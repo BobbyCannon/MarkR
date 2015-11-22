@@ -1,11 +1,16 @@
-﻿using System;
+﻿#region References
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+#endregion
 
 namespace MarkR.UnitTests
 {
 	[TestClass]
 	public class ParagraphTests
 	{
+		#region Methods
+
 		[TestMethod]
 		public void Paragraphs()
 		{
@@ -29,5 +34,7 @@ namespace MarkR.UnitTests
 
 			Assert.AreEqual(expected, actual);
 		}
+
+		#endregion
 	}
 }

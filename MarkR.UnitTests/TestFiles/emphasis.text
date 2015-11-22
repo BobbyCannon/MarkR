@@ -1,21 +1,21 @@
 Combined emphasis:
 
-1.  ***test test***
-2.  ___test test___
-3.  *test **test***
-4.  **test *test***
-5.  ***test* test**
-6.  ***test** test*
-7.  ***test* test**
-8.  **test *test***
-9.  *test **test***
-10. _test __test___
-11. __test _test___
-12. ___test_ test__
-13. ___test__ test_
-14. ___test_ test__
-15. __test _test___
-16. _test __test___
+1.  **_test test_**
+2.  __*test test*__
+3.  _test **test**_
+4.  **test _test_**
+5.  **_test_ test**
+6.  _**test** test_
+7.  **_test_ test**
+8.  **test _test_**
+9.  _test **test**_
+10. *test __test__*
+11. __test *test*__
+12. __*test* test__
+13. *__test__ test*
+14. __*test* test__
+15. __test *test*__
+16. *test __test__*
 
 
 Incorrect nesting:

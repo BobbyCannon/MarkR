@@ -15,7 +15,7 @@ namespace MarkR.UnitTests
 		public void HeaderAnchor()
 		{
 			var input = "# Header{#Header}";
-			var expected = "<p><h1 id=\"Header\">Header</h1></p>\n";
+			var expected = "<h1 id=\"Header\">Header</h1>\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);
@@ -27,7 +27,7 @@ namespace MarkR.UnitTests
 		public void HeaderAnchor2()
 		{
 			var input = "# Header {#Header}";
-			var expected = "<p><h1 id=\"Header\">Header </h1></p>\n";
+			var expected = "<h1 id=\"Header\">Header </h1>\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);
@@ -39,7 +39,7 @@ namespace MarkR.UnitTests
 		public void HeaderSix()
 		{
 			var input = "###### Header";
-			var expected = "<p><h6>Header</h6></p>\n";
+			var expected = "<h6>Header</h6>\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);
@@ -51,7 +51,7 @@ namespace MarkR.UnitTests
 		public void HeaderSixWithAnchor()
 		{
 			var input = "###### Header{#Header}";
-			var expected = "<p><h6 id=\"Header\">Header</h6></p>\n";
+			var expected = "<h6 id=\"Header\">Header</h6>\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);

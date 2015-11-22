@@ -2,9 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 #endregion
 
@@ -89,7 +91,7 @@ namespace MarkR
                     (.*?)                   # id = $3
                 \]
             )", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
+		
 		private static readonly Regex _anchorInline = new Regex($@"
                 (                           # wrap whole match in $1
                     \[
@@ -197,26 +199,8 @@ namespace MarkR
                   )
               )
             )", $"(?:{_markerUnorderedList}|{_markerOrderedList})", _tabWidth - 1);
-
-		private static readonly Regex _listNested = new Regex(@"^" + _wholeList,
-			RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
-		private static readonly Regex _listTopLevel = new Regex(@"(?:(?<=\n\n)|\A\n?)" + _wholeList,
-			RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
-		private static readonly Regex _codeBlock = new Regex(string.Format(@"
-                    (?:\n\n|\A\n?)
-                    (                        # $1 = the code block -- one or more lines, starting with a space
-                    (?:
-                        (?:[ ]{{{0}}})       # Lines must start with a tab-width of spaces
-                        .*\n+
-                    )+
-                    )
-                    ((?=^[ ]{{0,{0}}}[^ \t\n])|\Z) # Lookahead for non-space at line-start, or end of doc",
-			_tabWidth), RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-
 		private static readonly Regex _blockquote = new Regex(@"
-            (                           # Wrap whole match in $1
+			(                           # Wrap whole match in $1
                 (
                 ^[ ]*>[ ]?              # '>' at the start of a line
                     .+\n                # rest of the first line
@@ -224,19 +208,13 @@ namespace MarkR
                 \n*                     # blanks
                 )+
             )", RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline | RegexOptions.Compiled);
-
-		private static readonly Regex _bold = new Regex(@"(\*\*|__) (?=\S) (.+?[*_]*) (?<=\S) \1",
-			RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
-
-		private static readonly Regex _codeSpan = new Regex(@"
-                    (?<!\\)   # Character before opening ` can't be a backslash
-                    (\`)      # $1 = Opening run of `
-                    (.+?)     # $2 = The code block
-                    (?<!`)
-                    \1
-                    (?!`)", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
-		private static readonly Regex _githubCodeBlock = new Regex(@"(`{3})(\S+)?\n([\s\S][^`]+)\n(`{3})", RegexOptions.Compiled);
-		private static readonly Regex _italic = new Regex(@"(\*|_) (?=\S) (.+?) (?<=\S) \1", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
+		private static readonly Regex _bold = new Regex(@"(\*\*|__) (?=\S) (.+?[*_]*) (?<=\S) \1", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
+		private static readonly Regex _codeBlockFence = new Regex(@"(`{3})(\S+)?([\s\S][^`]+)(`{3})", RegexOptions.Compiled);
+		private static readonly Regex _listNested = new Regex(@"^" + _wholeList, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+		private static readonly Regex _listTopLevel = new Regex(@"(?:(?<=\n\n)|\A\n?)" + _wholeList, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+		private static readonly Regex _codeBlockSpaces = new Regex($@"^(?:\n?)((?:(?:[ ]{{{_tabWidth}}}).*\n+)+)((?=^[ ]{{0,{_tabWidth}}}[^ \t\n])|\Z)", RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+		private static readonly Regex _codeBlockSpan = new Regex(@"(?<!`)(`{1})([^`]\S+(?<!`))(`{1})|(`{2})[ ]([\s\S]+)[ ](`{2})", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
+		private static readonly Regex _italic = new Regex(@"(\*|_) (?=\S) (.+?) (?<=\S) (\*|_)", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 		private static readonly Regex _autolinkBare = new Regex(@"(<|="")?\b(https?|ftp)(://" + _charInsideUrl + "*" + _charEndingUrl + ")(?=$|\\W)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private static readonly Regex _endCharRegex = new Regex(_charEndingUrl, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private static readonly Regex _outDent = new Regex(@"^[ ]{1," + _tabWidth + @"}", RegexOptions.Multiline | RegexOptions.Compiled);
@@ -244,7 +222,7 @@ namespace MarkR
 
 		private static readonly Regex _backslashEscapes;
 
-		private static readonly Regex _codeEncoder = new Regex(@"&|<|>|\\|\*|_|\{|\}|\[|\]", RegexOptions.Compiled);
+		private readonly List<CodeBlock> _codeBlocks = new List<CodeBlock>();
 
 		private readonly Dictionary<string, string> _htmlBlocks = new Dictionary<string, string>();
 
@@ -257,7 +235,7 @@ namespace MarkR
 		private readonly Dictionary<string, string> _titles = new Dictionary<string, string>();
 		private static readonly Regex _unescapes = new Regex("\x1A" + "E\\d+E", RegexOptions.Compiled);
 		private readonly Dictionary<string, string> _urls = new Dictionary<string, string>();
-		private readonly List<CodeBlock> _codeBlocks = new List<CodeBlock>();
+		private readonly string[] _elementsNotToWrap = { "h1", "h2", "h3", "h4", "h5", "h6", "hr", "br", "p" };
 
 		#endregion
 
@@ -328,9 +306,12 @@ namespace MarkR
 			text = RunBlockGamut(text);
 			text = Unescape(text);
 
+			// These must be last.
+			text = EndCodeBlocks(text);
+			text = text.Replace(AutoLinkPreventionMarker, "://");
+
 			Cleanup();
 
-			text = text.Replace(AutoLinkPreventionMarker, "://");
 			return text + "\n";
 		}
 
@@ -482,6 +463,19 @@ namespace MarkR
 			return string.Format("<h{1}>{0}</h{1}>\n\n", RunSpanGamut(header), level);
 		}
 
+		private string BeginCodeBlocks(string text)
+		{
+			text = _codeBlockFence.Replace(text, CodeBlockFenceEvaluator);
+			text = _codeBlockSpaces.Replace(text, CodeBlockSpacesEvaluator);
+			return text;
+		}
+
+		private string BeginCodeBlocksForSpans(string text)
+		{
+			text = _codeBlockSpan.Replace(text, CodeBlockSpanEvaluator);
+			return text;
+		}
+
 		private string BlockQuoteEvaluator(Match match)
 		{
 			var bq = match.Groups[1].Value;
@@ -511,26 +505,50 @@ namespace MarkR
 			Setup();
 		}
 
-		private string CodeBlockEvaluator(Match match)
+		private string CodeBlockFenceEvaluator(Match match)
+		{
+			var codeBlock = match.Groups[3].Value.Trim();
+			var typeBlock = match.Groups[2].Value;
+
+			codeBlock = HttpUtility.HtmlEncode(codeBlock);
+			codeBlock = _newlinesLeadingTrailing.Replace(codeBlock, "");
+
+			var response = new CodeBlock { Id = Guid.NewGuid().ToString(), Code = codeBlock, ClassType = typeBlock, BlockType = CodeBlockType.Fence };
+			_codeBlocks.Add(response);
+
+			return response.Id + "\n";
+		}
+
+		private string CodeBlockSpacesEvaluator(Match match)
 		{
 			var codeBlock = match.Groups[1].Value;
 
-			codeBlock = EncodeCode(Outdent(codeBlock));
+			codeBlock = HttpUtility.HtmlEncode(Outdent(codeBlock));
 			codeBlock = _newlinesLeadingTrailing.Replace(codeBlock, "");
 
-			return string.Concat("\n\n<pre><code>\n", codeBlock, "\n</code></pre>\n\n");
+			var response = new CodeBlock { Id = Guid.NewGuid().ToString(), Code = codeBlock, BlockType = CodeBlockType.Spaces };
+			_codeBlocks.Add(response);
+
+			return "\n" + response.Id + "\n";
 		}
 
-		private string CodeSpanEvaluator(Match match)
+		private string CodeBlockSpanEvaluator(Match match)
 		{
-			var span = match.Groups[2].Value;
+			var codeBlock = match.Groups[2].Value;
+			if (string.IsNullOrWhiteSpace(codeBlock))
+			{
+				codeBlock = match.Groups[5].Value;
+			}
 
-			span = Regex.Replace(span, @"^[ ]*", ""); // leading whitespace
-			span = Regex.Replace(span, @"[ ]*$", ""); // trailing whitespace
-			span = EncodeCode(span);
-			span = SaveFromAutoLinking(span); // to prevent auto-linking. Not necessary in code *blocks*, but in code spans.
+			codeBlock = Regex.Replace(codeBlock, @"^[ ]*", ""); // leading whitespace
+			codeBlock = Regex.Replace(codeBlock, @"[ ]*$", ""); // trailing whitespace
+			codeBlock = HttpUtility.HtmlEncode(codeBlock);
+			codeBlock = SaveFromAutoLinking(codeBlock); // to prevent auto-linking. Not necessary in code *blocks*, but in code spans.
 
-			return string.Concat("<code>", span, "</code>");
+			var response = new CodeBlock { Id = Guid.NewGuid().ToString(), Code = codeBlock, BlockType = CodeBlockType.Span };
+			_codeBlocks.Add(response);
+
+			return response.Id;
 		}
 
 		/// <summary>
@@ -593,67 +611,6 @@ namespace MarkR
 		private string DoBlockQuotes(string text)
 		{
 			return _blockquote.Replace(text, BlockQuoteEvaluator);
-		}
-
-		/// <summary>
-		/// /// Turn Markdown 4-space indented code into HTML pre code blocks
-		/// </summary>
-		private string DoCodeBlocks(string text)
-		{
-			text = _codeBlock.Replace(text, CodeBlockEvaluator);
-			return text;
-		}
-
-		/// <summary>
-		/// Turn Markdown `code spans` into HTML code tags
-		/// </summary>
-		private string DoCodeSpans(string text)
-		{
-			//    * You can use multiple backticks as the delimiters if you want to
-			//        include literal backticks in the code span. So, this input:
-			//
-			//        Just type ``foo `bar` baz`` at the prompt.
-			//
-			//        Will translate to:
-			//
-			//          <p>Just type <code>foo `bar` baz</code> at the prompt.</p>
-			//
-			//        There's no arbitrary limit to the number of backticks you
-			//        can use as delimters. If you need three consecutive backticks
-			//        in your code, use four for delimiters, etc.
-			//
-			//    * You can use spaces to get literal backticks at the edges:
-			//
-			//          ... type `` `bar` `` ...
-			//
-			//        Turns to:
-			//
-			//          ... type <code>`bar`</code> ...         
-			//
-
-			return _codeSpan.Replace(text, CodeSpanEvaluator);
-		}
-
-		private string EndGithubCodeBlocks(string text)
-		{
-			// Reinsert the code block.
-			foreach (var codeBlock in _codeBlocks)
-			{
-				var newBlock = string.IsNullOrWhiteSpace(codeBlock.Type)
-					? string.Concat("<pre><code>", codeBlock.Code, "</code></pre>")
-					: string.Concat("<pre><code class=\"language-", codeBlock.Type, "\">", codeBlock.Code, "</code></pre>");
-
-				text = text
-					//.Replace($"<p>{codeBlock.Id}</p>", newBlock)
-					.Replace(codeBlock.Id.ToString(), newBlock);
-			}
-
-			return text;
-		}
-
-		private string BeginGithubCodeBlocks(string text)
-		{
-			return _githubCodeBlock.Replace(text, GithubCodeEvaluator);
 		}
 
 		/// <summary>
@@ -737,8 +694,8 @@ namespace MarkR
 		{
 			// We use a different prefix before nested lists than top-level lists.
 			// See extended comment in _ProcessListItems().
-			text = _listLevel > 0 
-				? _listNested.Replace(text, GetListEvaluator(isInsideParagraphlessListItem)) 
+			text = _listLevel > 0
+				? _listNested.Replace(text, GetListEvaluator(isInsideParagraphlessListItem))
 				: _listTopLevel.Replace(text, GetListEvaluator());
 
 			return text;
@@ -782,33 +739,6 @@ namespace MarkR
 		}
 
 		/// <summary>
-		/// Encode/escape certain Markdown characters inside code blocks and spans where they are literals
-		/// </summary>
-		private string EncodeCode(string code)
-		{
-			return _codeEncoder.Replace(code, EncodeCodeEvaluator);
-		}
-
-		private string EncodeCodeEvaluator(Match match)
-		{
-			switch (match.Value)
-			{
-				// Encode all ampersands; HTML entities are not
-				// entities within a Markdown code span.
-				case "&":
-					return "&amp;";
-				// Do the angle bracket song and dance
-				case "<":
-					return "&lt;";
-				case ">":
-					return "&gt;";
-				// escape characters that are magic in Markdown
-				default:
-					return _escapeTable[match.Value];
-			}
-		}
-
-		/// <summary>
 		/// hex-encodes some unusual "problem" chars in URLs to avoid URL detection problems
 		/// </summary>
 		private static string EncodeProblemUrlChars(string url)
@@ -836,6 +766,30 @@ namespace MarkR
 			}
 
 			return sb.ToString();
+		}
+
+		private string EndCodeBlocks(string text)
+		{
+			foreach (var codeBlock in _codeBlocks.Where(x => x.BlockType == CodeBlockType.Fence))
+			{
+				var newBlock = string.IsNullOrWhiteSpace(codeBlock.ClassType)
+					? string.Concat("<pre><code>", codeBlock.Code, "</code></pre>")
+					: string.Concat("<pre><code class=\"language-", codeBlock.ClassType, "\">", codeBlock.Code, "</code></pre>");
+
+				text = text.Replace(codeBlock.Id, newBlock);
+			}
+
+			foreach (var codeBlock in _codeBlocks.Where(x => x.BlockType == CodeBlockType.Spaces))
+			{
+				text = text.Replace(codeBlock.Id, string.Concat("<pre><code>", codeBlock.Code, "</code></pre>\n"));
+			}
+
+			foreach (var codeBlock in _codeBlocks.Where(x => x.BlockType == CodeBlockType.Span))
+			{
+				text = text.Replace(codeBlock.Id, string.Concat("<code>", codeBlock.Code, "</code>"));
+			}
+
+			return text;
 		}
 
 		/// <summary>
@@ -914,22 +868,33 @@ namespace MarkR
 		/// </summary>
 		private string FormParagraphs(string text, bool unhash = true)
 		{
-			// split on two or more newlines
 			var grafs = _newlinesMultiple.Split(_newlinesLeadingTrailing.Replace(text, ""));
 
-			var skipGraphs = false;
 			for (var i = 0; i < grafs.Length; i++)
 			{
-				if (grafs[i].Contains("<code ")
-					&& !grafs[i].Contains("</code>"))
+				var skipGraphs = false;
+
+				foreach (var element in _elementsNotToWrap)
+				{
+					if (grafs[i].StartsWith("<" + element) && (grafs[i].EndsWith(element + ">") || grafs[i].EndsWith(element + " />")))
+					{
+						skipGraphs = true;
+						break;
+					}
+				}
+
+				if (grafs[i].StartsWith("<!--") || grafs[i].EndsWith("-->"))
 				{
 					skipGraphs = true;
 				}
-				if (grafs[i].Contains("</code>")
-					&& !grafs[i].Contains("<code "))
+
+				if (grafs[i].Contains("<code ") && !grafs[i].Contains("</code>"))
+				{
+					skipGraphs = true;
+				}
+				else if (grafs[i].Contains("</code>") && !grafs[i].Contains("<code "))
 				{
 					skipGraphs = false;
-					continue;
 				}
 
 				if (skipGraphs)
@@ -939,7 +904,7 @@ namespace MarkR
 
 				if (grafs[i].StartsWith("\x1AH"))
 				{
-					// unhashify HTML blocks
+					// un-hash the HTML blocks
 					if (unhash)
 					{
 						var sanityCheck = 50; // just for safety, guard against an infinite loop
@@ -954,12 +919,6 @@ namespace MarkR
 							});
 							sanityCheck--;
 						}
-						/* if (keepGoing)
-						{
-							// Logging of an infinite loop goes here.
-							// If such a thing should happen, please open a new issue on http://code.google.com/p/markdownsharp/
-							// with the input that caused it.
-						}*/
 					}
 				}
 				else
@@ -1165,21 +1124,6 @@ namespace MarkR
 				@" \)
                     )*"
 				, _nestDepth));
-		}
-
-		private string GithubCodeEvaluator(Match match)
-		{
-			var codeBlock = match.Groups[3].Value;
-			var typeBlock = match.Groups[2].Value;
-
-			//removed Outdent on the codeblock
-			codeBlock = EncodeCode(codeBlock);
-			codeBlock = _newlinesLeadingTrailing.Replace(codeBlock, "");
-
-			var response = new CodeBlock { Id = Guid.NewGuid(), Code = codeBlock, Type = typeBlock };
-            _codeBlocks.Add(response);
-
-			return response.Id.ToString();
 		}
 
 		private static string HandleTrailingParens(Match match)
@@ -1505,8 +1449,7 @@ namespace MarkR
 				return $"<li>{item}</li>\n";
 			};
 
-			list = Regex.Replace(list, pattern, listItemEvaluator,
-				RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline);
+			list = Regex.Replace(list, pattern, listItemEvaluator, RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline);
 			_listLevel--;
 			return list;
 		}
@@ -1529,11 +1472,10 @@ namespace MarkR
 		/// </summary>
 		private string RunBlockGamut(string text, bool unhash = true)
 		{
-			text = BeginGithubCodeBlocks(text);
+			text = BeginCodeBlocks(text);
 			text = DoHeaders(text);
 			text = DoHorizontalRules(text);
 			text = DoLists(text);
-			text = DoCodeBlocks(text);
 			text = DoBlockQuotes(text);
 
 			// We already ran HashHTMLBlocks() before, in Markdown(), but that
@@ -1542,7 +1484,6 @@ namespace MarkR
 			// <p> tags around block-level tags.
 			text = HashHtmlBlocks(text);
 			text = FormParagraphs(text, unhash);
-			text = EndGithubCodeBlocks(text);
 
 			return text;
 		}
@@ -1552,7 +1493,7 @@ namespace MarkR
 		/// </summary>
 		private string RunSpanGamut(string text)
 		{
-			text = DoCodeSpans(text);
+			text = BeginCodeBlocksForSpans(text);
 			text = EscapeSpecialCharsWithinTagAttributes(text);
 			text = EscapeBackslashes(text);
 
@@ -1675,6 +1616,18 @@ namespace MarkR
 
 		#region Structures
 
+		private struct CodeBlock
+		{
+			#region Properties
+
+			public CodeBlockType BlockType { get; set; }
+			public string ClassType { get; set; }
+			public string Code { get; set; }
+			public string Id { get; set; }
+
+			#endregion
+		}
+
 		private struct Token
 		{
 			#region Fields
@@ -1695,16 +1648,16 @@ namespace MarkR
 			#endregion
 		}
 
-		private struct CodeBlock
-		{
-			public Guid Id { get; set; }
-			public string Code { get; set; }
-			public string Type { get; set; }
-		}
-
 		#endregion
 
 		#region Enumerations
+
+		private enum CodeBlockType
+		{
+			Fence,
+			Spaces,
+			Span
+		}
 
 		private enum TokenType
 		{

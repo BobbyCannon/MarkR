@@ -1,8 +1,8 @@
-<p>This tests for a bug where quotes escaped by PHP when using 
-<code>preg_replace</code> with the <code>/e</code> modifier must be correctly unescaped
+<p>This tests for a bug where quotes escaped by PHP when using <br />
+<code>preg_replace</code> with the <code>/e</code> modifier must be correctly unescaped<br />
 (hence the <code>_UnslashQuotes</code> function found only in PHP Markdown).</p>
 
-<p>Headers below should appear exactly as they are typed (no backslash
+<p>Headers below should appear exactly as they are typed (no backslash<br />
 added or removed).</p>
 
 <h1>Header "quoted\" again \""</h1>
@@ -13,5 +13,5 @@ added or removed).</p>
 
 <p>Test with tabs for <code>_Detab</code>:</p>
 
-<pre><code>Code    'block' with    some    "tabs"  and "quotes"
-</code></pre>
+<p><pre><code>Code    &#39;block&#39; with    some    &quot;tabs&quot;  and &quot;quotes&quot;</code></pre>
+</p>
