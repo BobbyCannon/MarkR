@@ -213,7 +213,7 @@ namespace MarkR
 		private static readonly Regex _listNested = new Regex(@"^" + _wholeList, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 		private static readonly Regex _listTopLevel = new Regex(@"(?:(?<=\n\n)|\A\n?)" + _wholeList, RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 		private static readonly Regex _codeBlockSpaces = new Regex($@"^(?:\n?)((?:(?:[ ]{{{_tabWidth}}}).*\n+)+)((?=^[ ]{{0,{_tabWidth}}}[^ \t\n])|\Z)", RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-		private static readonly Regex _codeBlockSpan = new Regex(@"(?<!`)(`{1})([^`]\S+(?<!`))(`{1})|(`{2})[ ]([\s\S]+)[ ](`{2})", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
+		private static readonly Regex _codeBlockSpan = new Regex(@"(?<![`\\])(`{1})([^`]\S+)(?<![`\\])(`{1})|(`{2})[ ]([\s\S]+)[ ](`{2})", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 		private static readonly Regex _italic = new Regex(@"(\*|_) (?=\S) (.+?) (?<=\S) (\*|_)", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 		private static readonly Regex _autolinkBare = new Regex(@"(<|="")?\b(https?|ftp)(://" + _charInsideUrl + "*" + _charEndingUrl + ")(?=$|\\W)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		private static readonly Regex _endCharRegex = new Regex(_charEndingUrl, RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -516,7 +516,7 @@ namespace MarkR
 			var response = new CodeBlock { Id = Guid.NewGuid().ToString(), Code = codeBlock, ClassType = typeBlock, BlockType = CodeBlockType.Fence };
 			_codeBlocks.Add(response);
 
-			return response.Id + "\n";
+			return response.Id + "\n\n";
 		}
 
 		private string CodeBlockSpacesEvaluator(Match match)
@@ -529,7 +529,7 @@ namespace MarkR
 			var response = new CodeBlock { Id = Guid.NewGuid().ToString(), Code = codeBlock, BlockType = CodeBlockType.Spaces };
 			_codeBlocks.Add(response);
 
-			return "\n" + response.Id + "\n";
+			return "\n" + response.Id + "\n\n";
 		}
 
 		private string CodeBlockSpanEvaluator(Match match)
@@ -781,7 +781,7 @@ namespace MarkR
 
 			foreach (var codeBlock in _codeBlocks.Where(x => x.BlockType == CodeBlockType.Spaces))
 			{
-				text = text.Replace(codeBlock.Id, string.Concat("<pre><code>", codeBlock.Code, "</code></pre>\n"));
+				text = text.Replace(codeBlock.Id, string.Concat("<pre><code>", codeBlock.Code, "</code></pre>"));
 			}
 
 			foreach (var codeBlock in _codeBlocks.Where(x => x.BlockType == CodeBlockType.Span))

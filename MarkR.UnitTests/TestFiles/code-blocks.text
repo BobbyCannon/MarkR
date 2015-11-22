@@ -9,6 +9,14 @@ Regular text.
 	the lines in this block  
 	all contain trailing spaces  
 
-Regular Text.
+More regular Text...
+
+    This should still work
+    even with more than
+    just two lines. This means that
+    we could do a lot more text in
+    a block.
+
+A bit more regular Text.
 
 	code block on the last line
