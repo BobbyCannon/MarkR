@@ -4,7 +4,7 @@
 		<id>MarkR</id>
 		<version>1.0</version>
 		<authors>Bobby Cannon</authors>
-		<description>Markdown parser written in C#. (BETA... maybe even alpha)</description>
+		<description>Markdown parser written in C#.</description>
 		<iconUrl>https://raw.githubusercontent.com/BobbyCannon/MarkR/master/MarkR.png</iconUrl>
 		<projectUrl>http://bobbycannon.github.io/MarkR</projectUrl>
 		<dependencies>

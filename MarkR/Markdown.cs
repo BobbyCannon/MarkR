@@ -80,29 +80,28 @@ namespace MarkR
 
 		private static readonly Regex _anchorRef = new Regex($@"
             (                               # wrap whole match in $1
-                \[
+				\[
                     ({GetNestedBracketsPattern()})                   # link text = $2
                 \]
-
                 [ ]?                        # one optional space
                 (?:\n[ ]*)?                 # one optional newline followed by spaces
-
-                \[
+                [\[\(]
                     (.*?)                   # id = $3
-                \]
+                [\]\)]
             )", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-		
+
 		private static readonly Regex _anchorInline = new Regex($@"
                 (                           # wrap whole match in $1
                     \[
                         ({GetNestedBracketsPattern()})               # link text = $2
                     \]
+					[ ]?                    # one optional space
                     \(                      # literal paren
                         [ ]*
                         ({GetNestedParensPattern()})               # href = $3
                         [ ]*
                         (                   # $4
-                        (['""])           # quote char = $5
+                        (['""])             # quote char = $5
                         (.*?)               # title = $6
                         \5                  # matching quote
                         [ ]*                # ignore any spaces between closing quote and )
@@ -111,26 +110,8 @@ namespace MarkR
                 )",
 			RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
-		private static readonly Regex _anchorRefShortcut = new Regex(@"
-            (                               # wrap whole match in $1
-              \[
-                 ([^\[\]]+)                 # link text = $2; can't contain [ or ]
-              \]
-            )", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-		private static readonly Regex _imagesRef = new Regex(@"
-                    (               # wrap whole match in $1
-                    !\[
-                        (.*?)       # alt text = $2
-                    \]
-
-                    [ ]?            # one optional space
-                    (?:\n[ ]*)?     # one optional newline followed by spaces
-
-                    \[
-                        (.*?)       # id = $3
-                    \]
-
-                    )", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
+		private static readonly Regex _anchorRefShortcut = new Regex(@"(\[([^\[\]]+)\])", RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+		private static readonly Regex _imagesRef = new Regex(@"(!\[(.*?)\][ ]?[\[\(](.*?)[\]\)])", RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
 		private static readonly Regex _imagesInline = new Regex($@"
               (                     # wrap whole match in $1
@@ -224,6 +205,8 @@ namespace MarkR
 
 		private readonly List<CodeBlock> _codeBlocks = new List<CodeBlock>();
 
+		private readonly string[] _elementsNotToWrap = { "h1", "h2", "h3", "h4", "h5", "h6", "hr", "br", "p", "ul", "ol", "blockquote", "pre", "code" };
+
 		private static readonly Dictionary<string, string> _hashedHtmlBlocks = new Dictionary<string, string>();
 
 		private static readonly Regex _leftAngles = new Regex(@"<(?![A-Za-z/?\$!])", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
@@ -235,7 +218,6 @@ namespace MarkR
 		private readonly Dictionary<string, string> _titles = new Dictionary<string, string>();
 		private static readonly Regex _unescapes = new Regex("\x1A" + "E\\d+E", RegexOptions.Compiled);
 		private readonly Dictionary<string, string> _urls = new Dictionary<string, string>();
-		private readonly string[] _elementsNotToWrap = { "h1", "h2", "h3", "h4", "h5", "h6", "hr", "br", "p", "ul", "ol", "blockquote", "pre", "code" };
 
 		#endregion
 
@@ -355,9 +337,8 @@ namespace MarkR
 		{
 			var wholeMatch = match.Groups[1].Value;
 			var linkText = SaveFromAutoLinking(match.Groups[2].Value);
-			var linkId = match.Groups[3].Value.ToLowerInvariant();
-
-			string result;
+			var linkId = match.Groups[3].Value;
+			LinkEventArgs args;
 
 			// for shortcut links like [this][].
 			if (linkId == "")
@@ -368,34 +349,38 @@ namespace MarkR
 			if (_urls.ContainsKey(linkId))
 			{
 				var url = _urls[linkId];
-
 				url = EncodeProblemUrlChars(url);
 				url = EscapeBoldItalic(url);
 
-				var args = new LinkEventArgs(url, url, linkText, "");
-				OnLinkParsed(args);
-
-				result = "<a href=\"" + args.Href + "\"";
-
-				if (_titles.ContainsKey(linkId))
-				{
-					var title = AttributeEncode(_titles[linkId]);
-					title = AttributeEncode(EscapeBoldItalic(title));
-					result += " title=\"" + title + "\"";
-				}
-
-				if (args.CssClass.Length > 0)
-				{
-					result += $" class=\"{args.CssClass}\"";
-				}
-
-				result += ">" + linkText + "</a>";
+				args = new LinkEventArgs(url, url, linkText, "");
 			}
 			else
 			{
-				result = wholeMatch;
+				// Allow someone to parse the custom reference.
+				args = new LinkEventArgs(linkId, linkId, linkText, "");
 			}
 
+			OnLinkParsed(args);
+			if (args.OriginalHref == linkId && args.Href == linkId)
+			{
+				return wholeMatch;
+			}
+
+			var result = "<a href=\"" + args.Href + "\"";
+
+			if (_titles.ContainsKey(linkId))
+			{
+				var title = AttributeEncode(_titles[linkId]);
+				title = AttributeEncode(EscapeBoldItalic(title));
+				result += " title=\"" + title + "\"";
+			}
+
+			if (args.CssClass.Length > 0)
+			{
+				result += $" class=\"{args.CssClass}\"";
+			}
+
+			result += ">" + linkText + "</a>";
 			return result;
 		}
 
@@ -485,11 +470,11 @@ namespace MarkR
 			blockQuote = RunBlockGamut(blockQuote);
 			blockQuote = Regex.Replace(blockQuote, @"^", "  ", RegexOptions.Multiline);
 			blockQuote = blockQuote.Replace("\n\n", "\n");
-			
+
 			// These leading spaces screw with <pre> content, so we need to fix that:
 			blockQuote = Regex.Replace(blockQuote, @"(\s*<pre>.+?</pre>)", BlockQuoteEvaluator2, RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline);
 			blockQuote = $"<blockquote>\n{blockQuote}\n</blockquote>\n\n";
-			
+
 			//var key = GetHashKey(bq, true);
 			//_hashedHtmlBlocks[key] = bq;
 
@@ -572,6 +557,7 @@ namespace MarkR
 			//  These must come last in case you've also got [link test][1]
 			//  or [link test](/foo)
 			text = _anchorRefShortcut.Replace(text, AnchorRefShortcutEvaluator);
+
 			return text;
 		}
 
@@ -753,7 +739,7 @@ namespace MarkR
 
 				if (encode && c == ':' && i < url.Length - 1)
 				{
-					encode = url[i + 1] != '/' && !(url[i + 1] >= '0' && url[i + 1] <= '9');
+					encode = url[i + 1] != '/' && !(url[i + 1] >= '0' && url[i + 1] <= '9') && url.Substring(0, i + 1).EndsWith("mailto", StringComparison.OrdinalIgnoreCase);
 				}
 
 				if (encode)
@@ -907,7 +893,7 @@ namespace MarkR
 				{
 					continue;
 				}
-				
+
 				// do span level processing inside the block, then wrap result in <p> tags
 				grafs[i] = _leadingWhitespace.Replace(RunSpanGamut(grafs[i]), "<p>") + "</p>";
 			}
@@ -1212,7 +1198,8 @@ namespace MarkR
 		{
 			var wholeMatch = match.Groups[1].Value;
 			var altText = match.Groups[2].Value;
-			var linkId = match.Groups[3].Value.ToLowerInvariant();
+			var linkId = match.Groups[3].Value;
+			ImageEventArgs args;
 
 			// for shortcut links like ![this][].
 			if (linkId == "")
@@ -1230,14 +1217,21 @@ namespace MarkR
 					title = _titles[linkId];
 				}
 
-				var args = new ImageEventArgs(url, url, altText, title);
-				OnImageParsed(args);
-
-				return ImageTag(args.Src, args.Alt, args.Title);
+				args = new ImageEventArgs(url, url, altText, title);
+			}
+			else
+			{
+				args = new ImageEventArgs(linkId, linkId, altText, "");
 			}
 
-			// If there's no such link ID, leave intact:
-			return wholeMatch;
+			OnImageParsed(args);
+			if (args.OriginalSrc == linkId && args.Src == linkId)
+			{
+				// If there's no such link ID, leave intact:
+				return wholeMatch;
+			}
+
+			return ImageTag(args.Src, args.Alt, args.Title);
 		}
 
 		private string ImageTag(string url, string altText, string title)
@@ -1576,6 +1570,11 @@ namespace MarkR
 			return tokens;
 		}
 
+		private static string UnescapeEvaluator(Match match)
+		{
+			return _invertedEscapeTable[match.Value];
+		}
+
 		/// <summary>
 		/// swap back in all the special characters we've hidden
 		/// </summary>
@@ -1589,11 +1588,6 @@ namespace MarkR
 		private static string UnhashHtmlEvaluator(Match match)
 		{
 			return _hashedHtmlBlocks[match.Value];
-		}
-
-		private static string UnescapeEvaluator(Match match)
-		{
-			return _invertedEscapeTable[match.Value];
 		}
 
 		#endregion

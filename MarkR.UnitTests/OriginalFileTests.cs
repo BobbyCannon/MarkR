@@ -276,7 +276,7 @@ namespace MarkR.UnitTests
 			var actual = parser.Transform(markdown);
 
 			// This is here so we can easily compare the difference in GIT.
-			File.WriteAllText(resultFile, actual);
+			//File.WriteAllText(resultFile, actual);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -332,7 +332,7 @@ namespace MarkR.UnitTests
 		public void Version()
 		{
 			var parser = new Markdown();
-			Assert.IsTrue(parser.Version.StartsWith("1.14"));
+			Assert.IsTrue(parser.Version.StartsWith("1.15"));
 		}
 
 		#endregion
