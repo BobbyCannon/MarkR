@@ -24,13 +24,26 @@ namespace MarkR.UnitTests
 		}
 
 		[TestMethod]
-		public void ImageLinkToCustomReference()
+		public void ImageLinkToCustomReferenceWithSpaces()
 		{
 			var input = "![blah] (File with spaces.png)";
 			var expected = "<p><img src=\"/Files?name=File%20with%20spaces.png\" alt=\"blah\" /></p>\n";
 
 			var parser = new Markdown();
 			parser.ImageParsed += (sender, args) => args.Src = "/Files?name=File%20with%20spaces.png";
+			var actual = parser.Transform(input);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		[TestMethod]
+		public void ImageLinkToCustomReferenceWithUnderscores()
+		{
+			var input = "![blah] (File_with_spaces.png)";
+			var expected = "<p><img src=\"/Files?name=File_with_spaces.png\" alt=\"blah\" /></p>\n";
+
+			var parser = new Markdown();
+			parser.ImageParsed += (sender, args) => args.Src = "/Files?name=File_with_spaces.png";
 			var actual = parser.Transform(input);
 
 			Assert.AreEqual(expected, actual);

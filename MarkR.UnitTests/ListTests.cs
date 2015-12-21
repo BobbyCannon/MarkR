@@ -1,22 +1,15 @@
-﻿using System;
+﻿#region References
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+#endregion
 
 namespace MarkR.UnitTests
 {
 	[TestClass]
 	public class ListTests
 	{
-		[TestMethod]
-		public void UnorderedList()
-		{
-			var input = "* Item1\n* Item2\n* Item3";
-			var expected = "<ul>\n<li>Item1</li>\n<li>Item2</li>\n<li>Item3</li>\n</ul>\n";
-
-			var parser = new Markdown();
-			var actual = parser.Transform(input);
-
-			Assert.AreEqual(expected, actual);
-		}
+		#region Methods
 
 		[TestMethod]
 		public void OrderedList()
@@ -29,5 +22,19 @@ namespace MarkR.UnitTests
 
 			Assert.AreEqual(expected, actual);
 		}
+
+		[TestMethod]
+		public void UnorderedList()
+		{
+			var input = "* Item1\n* Item2\n* Item3";
+			var expected = "<ul>\n<li>Item1</li>\n<li>Item2</li>\n<li>Item3</li>\n</ul>\n";
+
+			var parser = new Markdown();
+			var actual = parser.Transform(input);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		#endregion
 	}
 }

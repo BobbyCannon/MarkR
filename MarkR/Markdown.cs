@@ -213,7 +213,7 @@ namespace MarkR
 
 		private int _listLevel;
 
-		private static readonly char[] _problemUrlChars = @"""'*()[]$:_".ToCharArray();
+		private static readonly char[] _problemUrlChars = @"""'*()[]$:".ToCharArray();
 		private static readonly Regex _rightAngles = new Regex(@"(?<!br )(?<!hr[a-zA-Z"" =]* )(?<!h[1-6])((?<![/])(?<![a-zA-Z""'-]))>", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
 		private readonly Dictionary<string, string> _titles = new Dictionary<string, string>();
 		private static readonly Regex _unescapes = new Regex("\x1A" + "E\\d+E", RegexOptions.Compiled);
@@ -744,7 +744,7 @@ namespace MarkR
 
 				if (encode)
 				{
-					sb.Append($"%{c:x}");
+					sb.Append("%" + Convert.ToByte(c).ToString("X2"));
 				}
 				else
 				{
