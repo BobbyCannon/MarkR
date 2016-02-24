@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace MarkR.UnitTests
 {
 	[TestClass]
-	public class OriginalFileTests
+	public class TestFilesTests
 	{
 		#region Methods
 
@@ -293,6 +293,12 @@ namespace MarkR.UnitTests
 		}
 
 		[TestMethod]
+		public void Tables()
+		{
+			RunTestFile("tables");
+		}
+
+		[TestMethod]
 		public void Tabs()
 		{
 			RunTestFile("tabs");
@@ -332,7 +338,7 @@ namespace MarkR.UnitTests
 		public void Version()
 		{
 			var parser = new Markdown();
-			Assert.IsTrue(parser.Version.StartsWith("1.15"));
+			Assert.IsTrue(parser.Version.StartsWith("1.16"));
 		}
 
 		#endregion

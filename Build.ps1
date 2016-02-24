@@ -21,13 +21,13 @@ if (!(Test-Path $nugetDestination -PathType Container)){
     New-Item $nugetDestination -ItemType Directory | Out-Null
 }
 
-$build = [Math]::Floor([DateTime]::UtcNow.Subtract([DateTime]::Parse("01/01/2000").Date).TotalDays)
-$revision = [Math]::Floor([DateTime]::UtcNow.TimeOfDay.TotalSeconds / 2)
+$build = [Math]::Floor([DateTime]::Now.Subtract([DateTime]::Parse("01/01/2000").Date).TotalDays)
+$revision = [Math]::Floor([DateTime]::Now.TimeOfDay.TotalSeconds / 2)
 
 .\IncrementVersion.ps1 -Build $build -Revision $revision
 
 $msbuild = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
-& $msbuild "$scriptPath\MarkR.sln" /p:Configuration="$Configuration" /p:Platform="Any CPU" /t:Rebuild /p:VisualStudioVersion=12.0 /v:m /m
+& $msbuild "$scriptPath\MarkR.sln" /p:Configuration="$Configuration" /p:Platform="Any CPU" /t:Rebuild /p:VisualStudioVersion=14.0 /v:m /m
 
 Set-Location $scriptPath
 Copy-Item MarkR\bin\$Configuration\MarkR.dll $destination

@@ -1,32 +1,26 @@
 <p>Simple block on one line:</p>
-
-<p><div>foo</div></p>
+<div>foo</div>
 
 <p>And nested without indentation:</p>
-
-<p><div><br />
-<div><br />
-<div><br />
-foo<br />
-</div><br />
-<div style=">"/><br />
-</div><br />
-<div>bar</div><br />
-</div></p>
+<div>
+<div>
+<div>
+foo
+</div>
+<div style=">"/>
+</div>
+<div>bar</div>
+</div>
 
 <p>And with attributes:</p>
-
-<p><div></p>
-
-<pre><code>&lt;div id=&quot;foo&quot;&gt;
-&lt;/div&gt;</code></pre>
-
-<p></div></p>
+<div>
+    <div id="foo">
+    </div>
+</div>
 
 <p>This was broken in 1.0.2b7:</p>
-
-<p><div class="inlinepage"><br />
-<div class="toggleableend"><br />
-foo<br />
-</div><br />
-</div></p>
+<div class="inlinepage">
+<div class="toggleableend">
+foo
+</div>
+</div>

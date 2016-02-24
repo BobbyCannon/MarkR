@@ -27,7 +27,7 @@ namespace MarkR.UnitTests
 		public void CodeBlockFense()
 		{
 			var input = "```\n[Header1](#Header2)\n# Header1{#Header2}\n```";
-			var expected = "<pre><code>[Header1](#Header2)\n# Header1{#Header2}</code></pre>\n";
+			var expected = "<pre><code>[Header1](#Header2)\n# Header1{#Header2}</code></pre>";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);
@@ -51,7 +51,7 @@ namespace MarkR.UnitTests
 		public void CodeBlockSpanWithEscapedContent()
 		{
 			var input = @"The quick brown `` \`fox\` `` jumped over the lazy dog.";
-			var expected = "<p>The quick brown <code>\\`fox\\`</code> jumped over the lazy dog.</p>\n";
+			var expected = "<p>The quick brown <code>\\`fox\\` </code> jumped over the lazy dog.</p>\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);

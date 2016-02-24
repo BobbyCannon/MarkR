@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkR", "MarkR\MarkR.csproj", "{F8B8528C-32A3-463E-9098-41BB6056540A}"
 EndProject
@@ -14,7 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		MarkR.nuspec = MarkR.nuspec
 		MarkR.pdn = MarkR.pdn
 		README.md = README.md
-		WebEssentials2015-Settings.json = WebEssentials2015-Settings.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkR.UnitTests", "MarkR.UnitTests\MarkR.UnitTests.csproj", "{D60BA6A7-3F64-4199-9418-9DA3BE1A53DD}"

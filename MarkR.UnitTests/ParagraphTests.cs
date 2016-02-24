@@ -15,7 +15,7 @@ namespace MarkR.UnitTests
 		public void Paragraphs()
 		{
 			var input = "Foo\nbar\n\nHello\n\nWorld";
-			var expected = "<p>Foo<br />\nbar</p>\n\n<p>Hello</p>\n\n<p>World</p>\n";
+			var expected = "<p>Foo\nbar</p>\n<p>Hello</p>\n<p>World</p>\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);
@@ -27,7 +27,7 @@ namespace MarkR.UnitTests
 		public void ParagraphsWithHtmlBreakInMarkdown()
 		{
 			var input = "Foo\nbar\n\nHello\n\n<br />\nWorld";
-			var expected = "<p>Foo<br />\nbar</p>\n\n<p>Hello</p>\n\n<p><br />\nWorld</p>\n";
+			var expected = "<p>Foo\nbar</p>\n<p>Hello</p>\n<p><br />\nWorld</p>\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);

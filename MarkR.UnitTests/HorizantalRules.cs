@@ -1,33 +1,40 @@
-﻿using System;
+﻿#region References
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+#endregion
 
 namespace MarkR.UnitTests
 {
 	[TestClass]
 	public class HorizantalRules
 	{
-		[TestMethod]
-		public void ValidCharactersWithSpaces()
-		{
-			var input = "- - -\r\n* * *\r\n_ _ _";
-			var expected = "<hr />\n\n<hr />\n\n<hr />\n";
-
-			var parser = new Markdown();
-			var actual = parser.Transform(input);
-
-			Assert.AreEqual(expected, actual);
-		}
+		#region Methods
 
 		[TestMethod]
 		public void ValidCharacters()
 		{
 			var input = "---\n***\n___";
-			var expected = "<hr />\n\n<hr />\n\n<hr />\n";
+			var expected = "<hr />\n<hr />\n<hr />\n";
 
 			var parser = new Markdown();
 			var actual = parser.Transform(input);
 
 			Assert.AreEqual(expected, actual);
 		}
+
+		[TestMethod]
+		public void ValidCharactersWithSpaces()
+		{
+			var input = "- - -\r\n* * *\r\n_ _ _";
+			var expected = "<hr />\n<hr />\n<hr />\n";
+
+			var parser = new Markdown();
+			var actual = parser.Transform(input);
+
+			Assert.AreEqual(expected, actual);
+		}
+
+		#endregion
 	}
 }

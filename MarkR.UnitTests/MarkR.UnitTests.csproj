@@ -53,13 +53,14 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="OriginalFileTests.cs" />
+    <Compile Include="TestFilesTests.cs" />
     <Compile Include="HeaderTests.cs" />
     <Compile Include="LinkTests.cs" />
     <Compile Include="CodeBlockTests.cs" />
     <Compile Include="ListTests.cs" />
     <Compile Include="ParagraphTests.cs" />
     <Compile Include="HorizantalRules.cs" />
+    <Compile Include="HtmlTests.cs" />
     <Content Include="TestFiles\!sandbox.html" />
     <Content Include="TestFiles\amps-and-angle-encoding.html" />
     <Content Include="TestFiles\auto-links.html" />
@@ -104,6 +105,8 @@
     <Content Include="TestFiles\parens-in-url.html" />
     <Content Include="TestFiles\php-specific-bugs.html" />
     <Content Include="TestFiles\strong-and-em-together.html" />
+    <None Include="TestFiles\tables.text" />
+    <Content Include="TestFiles\tables.html" />
     <Content Include="TestFiles\tabs.html" />
     <Content Include="TestFiles\tidyness.html" />
     <Content Include="TestFiles\tight-blocks.html" />

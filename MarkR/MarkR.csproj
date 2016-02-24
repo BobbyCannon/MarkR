@@ -47,10 +47,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Internal\BlockRules.cs" />
     <Compile Include="ImageEventArgs.cs" />
+    <Compile Include="Internal\InlineLexer.cs" />
+    <Compile Include="Internal\InlineRules.cs" />
+    <Compile Include="Internal\Lexer.cs" />
     <Compile Include="LinkEventArgs.cs" />
     <Compile Include="Markdown.cs" />
+    <Compile Include="Internal\Objects.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="Internal\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Internal\Renderer.cs" />
+    <Compile Include="Internal\StringHelper.cs" />
+    <Compile Include="Internal\Token.cs" />
+    <Compile Include="Internal\TokensResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

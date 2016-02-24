@@ -16,12 +16,13 @@ namespace MarkR
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LinkEventArgs" /> class.
 		/// </summary>
-		public LinkEventArgs(string originalHref, string href, string text, string target)
+		public LinkEventArgs(string originalHref, string href, string text, string title, string target)
 		{
 			OriginalHref = originalHref;
 			Href = href;
-			Text = text;
 			Target = target;
+			Text = text;
+			Title = title;
 			CssClass = "";
 			IsInternalLink = false;
 		}
@@ -54,6 +55,11 @@ namespace MarkR
 		/// The target attribute, e.g. _blank.
 		/// </summary>
 		public string Target { get; set; }
+
+		/// <summary>
+		/// The title tag for the link.
+		/// </summary>
+		public string Title { get; set; }
 
 		/// <summary>
 		/// The link text.
