@@ -186,16 +186,6 @@ namespace MarkR.Internal
 			return $"<table>\n<thead>\n{header}</thead>\n<tbody>\n{body}</tbody>\n</table>\n";
 		}
 
-		internal virtual string TableCell(string content, TableCellFlags flags)
-		{
-			var type = flags.Header ? "th" : "td";
-			var tag = !string.IsNullOrEmpty(flags.Align)
-				? "<" + type + " style=\"text-align:" + flags.Align + "\">"
-				: "<" + type + ">";
-
-			return tag + content + "</" + type + ">\n";
-		}
-
 		public virtual string TableRow(string content)
 		{
 			return "<tr>\n" + content + "</tr>\n";
@@ -204,6 +194,16 @@ namespace MarkR.Internal
 		public virtual string Text(string text)
 		{
 			return text;
+		}
+
+		internal virtual string TableCell(string content, TableCellFlags flags)
+		{
+			var type = flags.Header ? "th" : "td";
+			var tag = !string.IsNullOrEmpty(flags.Align)
+				? "<" + type + " style=\"text-align:" + flags.Align + "\">"
+				: "<" + type + ">";
+
+			return tag + content + "</" + type + ">\n";
 		}
 
 		/// <summary>

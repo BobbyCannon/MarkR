@@ -57,14 +57,14 @@ namespace MarkR
 		public string Target { get; set; }
 
 		/// <summary>
-		/// The title tag for the link.
-		/// </summary>
-		public string Title { get; set; }
-
-		/// <summary>
 		/// The link text.
 		/// </summary>
 		public string Text { get; set; }
+
+		/// <summary>
+		/// The title tag for the link.
+		/// </summary>
+		public string Title { get; set; }
 
 		#endregion
 	}

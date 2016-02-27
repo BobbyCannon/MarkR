@@ -53,6 +53,18 @@ namespace MarkR
 
 		public bool Pedantic { get; set; }
 
+		public bool Sanitize { get; set; }
+
+		public Func<string, string> Sanitizer { get; set; }
+
+		public bool SmartLists { get; set; }
+
+		public bool Smartypants { get; set; }
+
+		public bool Tables { get; set; }
+
+		public bool XHtml { get; set; }
+
 		internal Renderer Renderer
 		{
 			get { return _renderer; }
@@ -65,18 +77,6 @@ namespace MarkR
 				}
 			}
 		}
-
-		public bool Sanitize { get; set; }
-
-		public Func<string, string> Sanitizer { get; set; }
-
-		public bool SmartLists { get; set; }
-
-		public bool Smartypants { get; set; }
-
-		public bool Tables { get; set; }
-
-		public bool XHtml { get; set; }
 
 		#endregion
 	}

@@ -20,8 +20,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkR.UnitTests", "MarkR.Un
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{871C8DA5-F455-4422-AC07-D13551B2664D}"
 	ProjectSection(SolutionItems) = preProject
-		Deploy.ps1 = Deploy.ps1
+		Build.ps1 = Build.ps1
 		IncrementVersion.ps1 = IncrementVersion.ps1
+		Publish.ps1 = Publish.ps1
 	EndProjectSection
 EndProject
 Global
