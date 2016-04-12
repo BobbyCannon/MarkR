@@ -14,6 +14,6 @@
 		</references>
 	</metadata>
 	<files>
-		<file src="C:\Binaries\MarkR\MarkR.dll" target="lib\net45" />
+		<file src="C:\Binaries\MarkR\MarkR.dll" target="lib\net452" />
 	</files>
 </package>
